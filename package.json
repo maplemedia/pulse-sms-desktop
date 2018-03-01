@@ -1,0 +1,55 @@
+{
+  "name": "pulse-sms",
+  "version": "v2.0.0",
+  "description": "A native desktop implementation of Pulse",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder build",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "repository": "https://github.com/klinker41/messenger-chrome",
+  "keywords": [
+    "pulse",
+    "sms",
+    "mms",
+    "android",
+    "messaging"
+  ],
+  "author": {
+    "name": "Luke Klinker",
+    "email": "luke@klinkerapps.com",
+    "url": "luke.klinker.xyz"
+  },
+  "license": "Apache-2.0",
+  "build": {
+    "appId": "xyz.klinker.messenger",
+    "productName": "Pulse SMS",
+    "asar": true,
+    "asarUnpack": [ "**/dict/*" ],
+    "artifactName": "pulse-sms-${version}-${arch}.${ext}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "publish": [{
+      "provider": "github",
+      "owner": "klinker24",
+      "repo": "messenger-desktop",
+      "releaseType": "draft"
+    }]
+  },
+  "devDependencies": {
+    "electron": "2.0.0-beta.1",
+    "electron-builder": "20.2.0"
+  },
+  "dependencies": {
+    "electron-json-storage": "3.1.0",
+    "electron-window-state": "4.1.1",
+    "electron-settings": "3.1.1",
+    "electron-updater": "2.20.1",
+    "electron-hunspell": "0.0.7",
+    "hazardous": "0.3.0",
+    "ws": "3.2.0"
+  }
+}
