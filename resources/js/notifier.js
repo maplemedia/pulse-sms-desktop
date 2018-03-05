@@ -25,6 +25,7 @@
   const preferences = require('./preferences.js')
 
   let lastNotificationTime = new Date().getTime()
+  let currentNotification = null
   let windowProvider = null
 
   var notify = (title, snippet, conversation_id, provider) => {
@@ -43,13 +44,7 @@
       snippet = ""
     }
 
-    // if (process.platform === 'win32') {
-    //   windowsNotification(title, snippet, conversation_id)
-    // } else if (process.platform == 'darwin') {
-    //   macNotification(title, snippet, conversation_id)
-    // } else {
-      genericNotification(title, snippet, conversation_id)
-    // }
+    genericNotification(title, snippet, conversation_id)
   }
 
   function genericNotification(title, snippet, conversation_id) {
@@ -65,15 +60,19 @@
       options.icon = path.join(__dirname, '../images/notification-icon.png')
     }
 
-    var notification = new Notification(options)
+    if (currentNotification != null) {
+      currentNotification.close()
+    }
 
-    notification.on('reply', (event, reply) => {
+    currentNotification = new Notification(options)
+
+    currentNotification.on('reply', (event, reply) => {
       sendMessage(reply, conversation_id)
       dismissNotification(conversation_id)
       markAsRead(conversation_id)
     })
 
-    notification.on('click', (event) => {
+    currentNotification.on('click', (event) => {
       var link = "https://messenger.klinkerapps.com/messages.html?conversation_id=" + conversation_id
 
       if (windowProvider.getWindow() !== null) {
@@ -89,7 +88,7 @@
       }
     })
 
-    notification.show()
+    currentNotification.show()
   }
 
   function shouldProvideNotification() {
@@ -224,82 +223,3 @@
 
   module.exports.notify = notify
 }())
-
-// NODE-NOTIFIER support
-// would need to move these back into the class.
-
-// function macNotification(title, snippet, conversation_id) {
-//   var macNotifier = new notifier.NotificationCenter({
-//     customPath: path.join(__dirname, '../Pulse.app/Contents/MacOS/pulse-sms'),
-//   })
-//
-//   macNotifier.notify({
-//     title: title,
-//     group: title,
-//     message: snippet,
-//     sound: preferences.notificationSounds(),
-//     closeLabel: "Close",
-//     // wait: true,
-//     // actions: 'Dismiss',
-//     reply: true
-//   }, (error, response, metadata) => {
-//     if (metadata.activationValue === "Dismiss") {
-//       dismissNotification(conversation_id)
-//     }
-//   })
-//
-//   // the reply didn't work great, because it would time out. Whenever you entered text for more than ~15 seconds,
-//   // the reply would time out and it wouldn't pass the result to this callback. Hopefully I can re-enable this
-//   // with future versions of the node-notifier library.
-//   // TO RE-ENABLE: remove the actions from the options hash and uncomment the "reply" option.
-//   macNotifier.on('replied', (obj, options, metadata) => {
-//     var message = metadata.activationValue
-//     sendMessage(message, conversation_id)
-//     dismissNotification(conversation_id)
-//     markAsRead(conversation_id)
-//   })
-//
-//   macNotifier.on('click', (obj, options, metadata) => {
-//     var link = "https://messenger.klinkerapps.com/messages.html?conversation_id=" + conversation_id
-//
-//     if (typeof metadata !== "undefined" && metadata.activationValue === "Reply") {
-//       createReplyWindow(link)
-//     } else if (windowProvider.getWindow() !== null) {
-//       windowProvider.getBrowserView().webContents.loadURL(link)
-//       windowProvider.getWindow().show()
-//       windowProvider.getWindow().focus()
-//       app.dock.show()
-//     } else {
-//       createWindow(link)
-//     }
-//   })
-// }
-
-// function windowsNotification(title, snippet, conversation_id) {
-//   const WindowsToaster = notifier.WindowsToaster
-//   var windowsNotifier = new WindowsToaster({
-//     withFallback: true
-//   })
-//
-//   windowsNotifier.notify({
-//     title: title,
-//     message: snippet,
-//     icon: path.join(__dirname, '../images/notification-icon.png'),
-//     sound: preferences.notificationSounds(),
-//     wait: true,
-//     appName: "xyz.klinker.messenger"
-//   }, (error, response) => {
-//     console.log(response)
-//   })
-//
-//   windowsNotifier.on('click', () => {
-//     var link = "https://messenger.klinkerapps.com/messages.html?conversation_id=" + conversation_id
-//     if (windowProvider.getWindow() !== null) {
-//       windowProvider.getBrowserView().webContents.loadURL(link)
-//       windowProvider.getWindow().show()
-//       windowProvider.getWindow().focus()
-//     } else {
-//       createWindow(link)
-//     }
-//   })
-// }
