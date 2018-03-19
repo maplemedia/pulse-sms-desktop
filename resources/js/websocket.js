@@ -180,7 +180,7 @@
               try {
                 app.setBadgeCount(unread.unread)
                 if (process.platform === 'darwin' && tray != null) {
-                  tray.setTitle(unread.unread == 0 ? "" : unread.unread + "")
+                  tray.setTitle(unread.unread == 0 ? " " : unread.unread + "")
                 }
               } catch (err) {}
             }
