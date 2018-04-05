@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-const { app, Tray, Menu, dialog } = require('electron')
+const { app, Tray, Menu, dialog, crashReporter } = require('electron')
 const { autoUpdater } = require("electron-updater")
 
 const storage = require('electron-json-storage')
@@ -52,6 +52,13 @@ app.on('before-quit', () => {
   // might cause issues in the future as before-quit and will-quit events are not called
   webSocket.closeWebSocket()
   app.exit(0)
+})
+
+crashReporter.start({
+  productName: "messenger",
+  companyName: "messenger-desktop",
+  submitURL: "https://messenger-desktop.sp.backtrace.io:6098/post?format=minidump&token=6b041aff41e611b0cbd7c098dba17a179459092c02601691d7261944d0f5705e",
+  uploadToServer: true
 })
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
