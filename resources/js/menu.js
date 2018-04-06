@@ -134,7 +134,7 @@
           if (!badge) {
             require('electron').app.setBadgeCount(0)
             if (process.platform === 'darwin' && tray != null) {
-              tray.setTitle(unread.unread == 0 ? "" : unread.unread + "")
+              tray.setTitle("")
             }
           }
         }
