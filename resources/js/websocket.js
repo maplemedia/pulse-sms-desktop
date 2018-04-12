@@ -191,6 +191,10 @@
   }
 
   function provideNotification(message, conversation, aesKey) {
+    if (conversation == null) {
+      return
+    }
+
     var title = decrypt.decrypt(conversation.title, aesKey)
     var phone_numbers = decrypt.decrypt(conversation.phone_numbers, aesKey)
     var snippet = message.mime_type === "text/plain" ? message.data : "New Message"
