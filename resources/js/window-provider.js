@@ -36,15 +36,15 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
     try {
       mainWindowState = windowStateKeeper( { defaultWidth: 1000, defaultHeight: 750 } )
       bounds = {
-        title: "Pulse SMS", x: mainWindowState.x, y: mainWindowState.y,
+        title: "Pulse SMS", icon: path.join(__dirname, '../../build/icon.png'),
+        show: !noGui, x: mainWindowState.x, y: mainWindowState.y,
         width: mainWindowState.width, height: mainWindowState.height,
-        show : !noGui
       }
     } catch (err) {
       bounds = {
-        title: "Pulse SMS", x: 0, y: 0,
+        title: "Pulse SMS", icon: path.join(__dirname, '../../build/icon.png'),
+        show: !noGui, x: 0, y: 0,
         width: 1000, height: 750,
-        show : !noGui
       }
     }
 
@@ -54,7 +54,7 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
     if (noGui) {
       noGui = false;
     }
-    
+
     if (app.getLocale().indexOf("en") >= 0) {
       browserView = new BrowserView( { webPreferences: { nodeIntegration: false, preload: path.join(__dirname, 'spellcheck-preparer.js') } } )
     } else {
