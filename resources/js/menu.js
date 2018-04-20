@@ -229,6 +229,11 @@ var prefsMenu = {
     }, 
     prefsMenu,
     {
+      label: 'Show Popup Window',
+      click: () => {
+        showPoupWindow(windowProvider)
+      }
+    }, {
       label: 'Quit',
       accelerator: 'Command+Q',
       click: () => {
@@ -258,6 +263,19 @@ var prefsMenu = {
       }, 1000)
     } else {
       windowProvider.createMainWindow()
+    }
+  }
+
+  function showPoupWindow(windowProvider) {
+    if (windowProvider.getReplyWindow() !== null) {
+      windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://messenger.klinkerapps.com')")
+      windowProvider.getReplyWindow().show()
+      windowProvider.getReplyWindow().focus()
+    } else {
+      windowProvider.createReplyWindow()
+      setTimeout(() => {
+        windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://messenger.klinkerapps.com')")
+      }, 500)
     }
   }
 
