@@ -15,8 +15,9 @@
  */
 const preferences = require('./preferences.js')
 
-// Save the prefsMenu then reuse it later on.
-var prefsMenu = {
+// Save the preferencesMenu then reuse it later on.
+// This way we can use the same menu in the GUI and on the tray
+var preferencesMenu = {
   label: 'Preferences',
   submenu: [{
     label: 'Notification Preferences',
@@ -75,7 +76,7 @@ var prefsMenu = {
 
   var buildMenu = (windowProvider, tray, webSocket) => {
     const template = [
-      prefsMenu, {
+      preferencesMenu, {
       label: 'Edit',
       submenu: [
         { role: 'undo' },
@@ -227,13 +228,12 @@ var prefsMenu = {
         showWindow(windowProvider)
       }
     }, 
-    prefsMenu,
     {
       label: 'Show Popup Window',
       click: () => {
         showPoupWindow(windowProvider)
       }
-    }, {
+    }, preferencesMenu, {
       label: 'Quit',
       accelerator: 'Command+Q',
       click: () => {
