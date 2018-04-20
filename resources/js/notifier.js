@@ -64,7 +64,6 @@
       currentNotification.close()
     }
 
-    console.log("Notification options: " + JSON.stringify(options))
     currentNotification = new Notification(options)
 
     currentNotification.on('reply', (event, reply) => {
