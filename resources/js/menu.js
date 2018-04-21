@@ -15,11 +15,7 @@
  */
 const preferences = require('./preferences.js')
 
-// Save the preferencesMenu then reuse it later on.
-// This way we can use the same menu in the GUI and on the tray
-var preferencesMenu = {
-  label: 'Preferences',
-  submenu: [{
+var notificationPreferencesMenu = {
     label: 'Notification Preferences',
     submenu: [
       { label: "Show Notifications", type: 'checkbox', checked: preferences.showNotifications(), click() {
@@ -49,23 +45,9 @@ var preferencesMenu = {
         { label: "12 hours", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "12_hours", click() {
           preferences.snooze("12_hours") }
         }
-      ] }
-    ]
-  }, { type: 'separator' }, {
-    label: process.platform === 'darwin' ? 'Show in Menu Bar' : 'Show in Tray',
-    type: 'checkbox',
-    checked: preferences.minimizeToTray(),
-    click() {
-      let toTray = !preferences.minimizeToTray()
-      preferences.toggleMinimizeToTray()
-
-      if (!toTray && tray != null) {
-        tray.destroy()
-      } else {
-        tray = buildTray(windowProvider, webSocket)
-      }
+      ] 
     }
-  } ]
+  ]
 };
 
 (function() {
@@ -75,8 +57,24 @@ var preferencesMenu = {
   const browserviewPreparer = require('./browserview-configurator.js')
 
   var buildMenu = (windowProvider, tray, webSocket) => {
-    const template = [
-      preferencesMenu, {
+    const template = [{
+        label: 'Preferences',
+        submenu: [ notificationPreferencesMenu, { type: 'separator' }, {
+          label: process.platform === 'darwin' ? 'Show in Menu Bar' : 'Show in Tray',
+          type: 'checkbox',
+          checked: preferences.minimizeToTray(),
+          click() {
+            let toTray = !preferences.minimizeToTray()
+            preferences.toggleMinimizeToTray()
+      
+            if (!toTray && tray != null) {
+              tray.destroy()
+            } else {
+              tray = buildTray(windowProvider, webSocket)
+            }
+          }
+        } ]
+      }, {
       label: 'Edit',
       submenu: [
         { role: 'undo' },
@@ -233,7 +231,7 @@ var preferencesMenu = {
       click: () => {
         showPoupWindow(windowProvider)
       }
-    }, preferencesMenu, {
+    }, notificationPreferencesMenu, {
       label: 'Quit',
       accelerator: 'Command+Q',
       click: () => {
