@@ -14,64 +14,70 @@
  *  limitations under the License.
  */
 
+const preferences = require('./preferences.js')
+
+// Save the notification preferences menu to be able to snooze and set other options via
+//  both the tray icon and GUI
+var notificationPreferencesMenu = {
+    label: 'Notification Preferences',
+    submenu: [
+      { label: "Show Notifications", type: 'checkbox', checked: preferences.showNotifications(), click() {
+        preferences.toggleShowNotifications() }
+      },
+      { label: "Play Notification Sound", type: 'checkbox', checked: preferences.notificationSounds(), click() {
+        preferences.toggleNotificationSounds() }
+      },
+      { type: 'separator' },
+      { label: "Display Sender in Notification", type: 'checkbox', checked: preferences.notificationSenderPreviews(), click() {
+        preferences.toggleNotificationSenderPreviews() }
+      },
+      { label: "Display Message Preview in Notification", type: 'checkbox', checked: preferences.notificationMessagePreviews(), click() {
+        preferences.toggleNotificationMessagePreviews() }
+      },
+      { type: 'separator' },
+      { label: "Snooze Desktop Notifications", submenu: [
+        { label: "30 mins", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "30_mins", click() {
+          preferences.snooze("30_mins") }
+        },
+        { label: "1 hour", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "1_hour", click() {
+          preferences.snooze("1_hour") }
+        },
+        { label: "3 hours", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "3_hours", click() {
+          preferences.snooze("3_hours") }
+        },
+        { label: "12 hours", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "12_hours", click() {
+          preferences.snooze("12_hours") }
+        }
+      ] 
+    }
+  ]
+};
+
 (function() {
   const { BrowserView, Menu, Tray, app } = require('electron')
 
   const path = require('path')
-  const preferences = require('./preferences.js')
   const browserviewPreparer = require('./browserview-configurator.js')
 
   var buildMenu = (windowProvider, tray, webSocket) => {
     const template = [{
-      label: 'Preferences',
-      submenu: [{
-        label: 'Notification Preferences',
-        submenu: [
-          { label: "Show Notifications", type: 'checkbox', checked: preferences.showNotifications(), click() {
-            preferences.toggleShowNotifications() }
-          },
-          { label: "Play Notification Sound", type: 'checkbox', checked: preferences.notificationSounds(), click() {
-            preferences.toggleNotificationSounds() }
-          },
-          { type: 'separator' },
-          { label: "Display Sender in Notification", type: 'checkbox', checked: preferences.notificationSenderPreviews(), click() {
-            preferences.toggleNotificationSenderPreviews() }
-          },
-          { label: "Display Message Preview in Notification", type: 'checkbox', checked: preferences.notificationMessagePreviews(), click() {
-            preferences.toggleNotificationMessagePreviews() }
-          },
-          { type: 'separator' },
-          { label: "Snooze Desktop Notifications", submenu: [
-            { label: "30 mins", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "30_mins", click() {
-              preferences.snooze("30_mins") }
-            },
-            { label: "1 hour", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "1_hour", click() {
-              preferences.snooze("1_hour") }
-            },
-            { label: "3 hours", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "3_hours", click() {
-              preferences.snooze("3_hours") }
-            },
-            { label: "12 hours", type: 'checkbox', checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() == "12_hours", click() {
-              preferences.snooze("12_hours") }
+        label: 'Preferences',
+        submenu: [ notificationPreferencesMenu, { type: 'separator' }, {
+          label: process.platform === 'darwin' ? 'Show in Menu Bar' : 'Show in Tray',
+          type: 'checkbox',
+          checked: preferences.minimizeToTray(),
+          click() {
+            let toTray = !preferences.minimizeToTray()
+            preferences.toggleMinimizeToTray()
+      
+            if (!toTray && tray != null) {
+              tray.destroy()
+            } else {
+              tray = buildTray(windowProvider, webSocket)
             }
-          ] }
-        ]
-      }, { type: 'separator' }, {
-        label: process.platform === 'darwin' ? 'Show in Menu Bar' : 'Show in Tray',
-        type: 'checkbox',
-        checked: preferences.minimizeToTray(),
-        click() {
-          let toTray = !preferences.minimizeToTray()
-          preferences.toggleMinimizeToTray()
-
-          if (!toTray && tray != null) {
-            tray.destroy()
-          } else {
-            tray = buildTray(windowProvider, webSocket)
           }
-        }
-      } ]
-    }, {
+        } ]
+      }, {
       label: 'Edit',
       submenu: [
         { role: 'undo' },
@@ -122,25 +128,6 @@
       ]
     }]
 
-    if (process.platform !== "win32") {
-      template[0].submenu.push({
-        label: 'Show Unread Count on Icon',
-        type: 'checkbox',
-        checked: preferences.badgeDockIcon(),
-        click() {
-          let badge = !preferences.badgeDockIcon()
-          preferences.toggleBadgeDockIcon()
-
-          if (!badge) {
-            require('electron').app.setBadgeCount(0)
-            if (process.platform === 'darwin' && tray != null) {
-              tray.setTitle("")
-            }
-          }
-        }
-      })
-    }
-
     if (process.platform === 'darwin') {
       const name = require('electron').app.getName()
       template.unshift({
@@ -189,6 +176,25 @@
       })
     }
 
+    if (process.platform !== "win32") {
+      template[0].submenu.push({
+        label: 'Show Unread Count on Icon',
+        type: 'checkbox',
+        checked: preferences.badgeDockIcon(),
+        click() {
+          let badge = !preferences.badgeDockIcon()
+          preferences.toggleBadgeDockIcon()
+    
+          if (!badge) {
+            require('electron').app.setBadgeCount(0)
+            if (process.platform === 'darwin' && tray != null) {
+              tray.setTitle("")
+            }
+          }
+        }
+      })
+    }
+
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
 
@@ -222,12 +228,13 @@
       click: () => {
         showWindow(windowProvider)
       }
-    }, {
+    }, 
+    {
       label: 'Show Popup Window',
       click: () => {
         showPoupWindow(windowProvider)
       }
-    }, {
+    }, notificationPreferencesMenu, {
       label: 'Quit',
       accelerator: 'Command+Q',
       click: () => {
