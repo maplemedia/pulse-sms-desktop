@@ -53,25 +53,6 @@ var notificationPreferencesMenu = {
   ]
 };
 
-if (process.platform !== "win32") {
-  notificationPreferencesMenu.submenu.push({
-    label: 'Show Unread Count on Icon',
-    type: 'checkbox',
-    checked: preferences.badgeDockIcon(),
-    click() {
-      let badge = !preferences.badgeDockIcon()
-      preferences.toggleBadgeDockIcon()
-
-      if (!badge) {
-        require('electron').app.setBadgeCount(0)
-        if (process.platform === 'darwin' && tray != null) {
-          tray.setTitle("")
-        }
-      }
-    }
-  })
-}
-
 (function() {
   const { BrowserView, Menu, Tray, app } = require('electron')
 
@@ -191,6 +172,25 @@ if (process.platform !== "win32") {
           windowProvider.getWindow().setMenuBarVisibility(!autoHide)
 
           browserviewPreparer.prepare(windowProvider.getWindow(), windowProvider.getBrowserView())
+        }
+      })
+    }
+
+    if (process.platform !== "win32") {
+      template[0].submenu.push({
+        label: 'Show Unread Count on Icon',
+        type: 'checkbox',
+        checked: preferences.badgeDockIcon(),
+        click() {
+          let badge = !preferences.badgeDockIcon()
+          preferences.toggleBadgeDockIcon()
+    
+          if (!badge) {
+            require('electron').app.setBadgeCount(0)
+            if (process.platform === 'darwin' && tray != null) {
+              tray.setTitle("")
+            }
+          }
         }
       })
     }
