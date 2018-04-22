@@ -163,7 +163,7 @@
   }
 
   function updateBadgeCount(timeout) {
-    if (process.platform === 'win32' || !preferences.badgeDockIcon()) {
+    if (!preferences.badgeDockIcon()) {
       return
     }
 
@@ -172,17 +172,31 @@
     }
 
     setTimeout(() => {
+      const path = require('path')
+
       storage.get("account_id", (error, id) => {
         if (!error && id.length != 0) {
           var url = "https://api.messenger.klinkerapps.com/api/v1/conversations/unread_count?account_id=" + id
           getJSON(url, (unread) => {
-            if (typeof unread !== "undefinded" && unread != null) {
+            if (typeof unread !== "undefined" && unread != null) {
               try {
+
+                // If on Windows, change the icon to look different to denote message(s) are unread
+                if (process.platform === 'win32' && tray != null) {
+                  if (unread.unread > 0) {
+                    tray.setImage(path.resolve(__dirname, "../images/tray/windows_unread.ico"))
+                  }
+                  else {
+                    tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
+                  }
+                  
+                }
+
                 app.setBadgeCount(unread.unread)
                 if (process.platform === 'darwin' && tray != null) {
                   tray.setTitle(unread.unread == 0 ? "" : unread.unread + "")
                 }
-              } catch (err) {}
+              } catch (err) { }
             }
           })
         }
