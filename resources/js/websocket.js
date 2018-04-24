@@ -180,21 +180,17 @@
           getJSON(url, (unread) => {
             if (typeof unread !== "undefined" && unread != null) {
               try {
-
-                // If on Windows, change the icon to look different to denote message(s) are unread
                 if (process.platform === 'win32' && tray != null) {
                   if (unread.unread > 0) {
                     tray.setImage(path.resolve(__dirname, "../images/tray/windows_unread.ico"))
-                  }
-                  else {
+                  } else {
                     tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
                   }
-                  
-                }
-
-                app.setBadgeCount(unread.unread)
-                if (process.platform === 'darwin' && tray != null) {
-                  tray.setTitle(unread.unread == 0 ? "" : unread.unread + "")
+                } else {
+                  app.setBadgeCount(unread.unread)
+                  if (process.platform === 'darwin' && tray != null) {
+                    tray.setTitle(unread.unread == 0 ? "" : unread.unread + "")
+                  }
                 }
               } catch (err) { }
             }
