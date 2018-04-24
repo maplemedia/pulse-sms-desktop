@@ -200,7 +200,6 @@
     if (unread.unread > 0) {
       tray.setImage(path.resolve(__dirname, "../images/tray/windows-unread.ico"))
       if (typeof window !== "undefined" && window != null) {
-        console.log("setting windows overlay")
         window.setOverlayIcon(path.resolve(__dirname, "../images/windows-overlay.ico"), unread.unread + " Unread Conversations")
       }
     } else {
