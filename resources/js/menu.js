@@ -125,24 +125,29 @@
       ]
     }]
 
-    if (process.platform !== "win32") {
-      template[0].submenu.push({
-        label: 'Show Unread Count on Icon',
-        type: 'checkbox',
-        checked: preferences.badgeDockIcon(),
-        click() {
-          let badge = !preferences.badgeDockIcon()
-          preferences.toggleBadgeDockIcon()
+    template[0].submenu.push({
+      label: process.platform !== "win32" ? 'Show Unread Count on Icon' : 'Show Unread Indicator on Icon',
+      type: 'checkbox',
+      checked: preferences.badgeDockIcon(),
+      click() {
+        let badge = !preferences.badgeDockIcon()
+        preferences.toggleBadgeDockIcon()
 
-          if (!badge) {
+        if (!badge) {
+          if (process.platform !== "win32") {
             require('electron').app.setBadgeCount(0)
-            if (process.platform === 'darwin' && tray != null) {
-              tray.setTitle("")
-            }
+          }
+
+          if (process.platform === 'darwin' && tray != null) {
+            tray.setTitle("")
+          }
+
+          if (process.platform === "win32" && tray != null) {
+            tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
           }
         }
-      })
-    }
+      }
+    })
 
     if (process.platform === 'darwin') {
       const name = require('electron').app.getName()
