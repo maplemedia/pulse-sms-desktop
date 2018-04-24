@@ -132,6 +132,10 @@
 
   function newMessage(message) {
     storage.getMany(["account_id", "hash", "salt"], (error, result) => {
+      if (typeof result === "undefined" || result == null) {
+        return
+      }
+
       var aesKey = decrypt.buildAesKey(result.account_id, result.hash, result.salt)
 
       try {
