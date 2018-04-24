@@ -172,8 +172,6 @@
     }
 
     setTimeout(() => {
-      const path = require('path')
-
       storage.get("account_id", (error, id) => {
         if (!error && id.length != 0) {
           var url = "https://api.messenger.klinkerapps.com/api/v1/conversations/unread_count?account_id=" + id
@@ -181,23 +179,43 @@
             if (typeof unread !== "undefined" && unread != null) {
               try {
                 if (process.platform === 'win32' && tray != null) {
-                  if (unread.unread > 0) {
-                    tray.setImage(path.resolve(__dirname, "../images/tray/windows_unread.ico"))
-                  } else {
-                    tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
-                  }
+                  setWindowsIndicator(unread, tray)
                 } else {
-                  app.setBadgeCount(unread.unread)
-                  if (process.platform === 'darwin' && tray != null) {
-                    tray.setTitle(unread.unread == 0 ? "" : unread.unread + "")
-                  }
+                  setMacLinuxIndicators(unread, tray)
                 }
-              } catch (err) { }
+              } catch (err) {
+                console.log(err)
+              }
             }
           })
         }
       })
     }, timeout)
+  }
+
+  function setWindowsIndicator(unread, tray) {
+    const path = require('path')
+
+    let window = windowProvider.getWindow()
+    if (unread.unread > 0) {
+      tray.setImage(path.resolve(__dirname, "../images/tray/windows-unread.ico"))
+      if (typeof window !== "undefined" && window != null) {
+        console.log("setting windows overlay")
+        window.setOverlayIcon(path.resolve(__dirname, "../images/windows-overlay.ico"), unread.unread + " Unread Conversations")
+      }
+    } else {
+      tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
+      if (typeof window !== "undefined" && window != null) {
+        window.setOverlayIcon(null, "No Unread Conversations")
+      }
+    }
+  }
+
+  function setMacLinuxIndicators(unread, tray) {
+    app.setBadgeCount(unread.unread)
+    if (process.platform === 'darwin' && tray != null) {
+      tray.setTitle(unread.unread == 0 ? "" : unread.unread + "")
+    }
   }
 
   function provideNotification(message, conversation, aesKey) {

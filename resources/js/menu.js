@@ -142,8 +142,11 @@
             tray.setTitle("")
           }
 
-          if (process.platform === "win32" && tray != null) {
-            tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
+          if (process.platform === "win32") {
+            windowProvider.getWindow().setOverlayIcon(null, "No Unread Conversations")
+            if (tray != null) {
+              tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
+            }
           }
         }
       }
