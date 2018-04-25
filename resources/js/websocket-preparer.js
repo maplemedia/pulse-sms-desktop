@@ -17,7 +17,10 @@
  (function() {
 
   const storage = require('electron-json-storage')
+  const HttpsProxyAgent = require('https-proxy-agent')
   const debug = false
+
+  let proxyAgent = null
 
   var prepare = (browser) => {
     browser.webContents.executeJavaScript('accountId', true).then((id) => {
@@ -42,5 +45,17 @@
     }
   }
 
+  function getProxyAgent() {
+    // use the PULSE_PROXY or HTTPS_PROXY environment variable to determine if we should use a proxy
+    var envProxy = process.env.PULSE_PROXY || process.env.HTTPS_PROXY
+    if (!proxyAgent && envProxy) {
+      console.log("Attempting to get a proxy agent with \"" + envProxy + "\"")
+      proxyAgent = HttpsProxyAgent(envProxy)
+    }
+
+    return proxyAgent
+  }
+
   module.exports.prepare = prepare
+  module.exports.getProxyAgent = getProxyAgent
 }())

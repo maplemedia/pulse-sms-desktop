@@ -23,6 +23,7 @@
   const storage = require('electron-json-storage')
   const encrypt = require('./decrypt.js')
   const preferences = require('./preferences.js')
+  const preparer = require('./websocket-preparer.js')
 
   let lastNotificationTime = new Date().getTime()
   let currentNotification = null
@@ -144,7 +145,8 @@
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data)
-        }
+        },
+        agent: preparer.getProxyAgent()
       }
 
       var req = https.request(options)
@@ -172,7 +174,8 @@
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data)
-        }
+        },
+        agent: preparer.getProxyAgent()
       }
 
       var req = https.request(options)
@@ -199,7 +202,8 @@
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data)
-        }
+        },
+        agent: preparer.getProxyAgent()
       }
 
       var req = https.request(options)

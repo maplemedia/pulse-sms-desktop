@@ -27,17 +27,21 @@
     "appId": "xyz.klinker.messenger",
     "productName": "Pulse SMS",
     "asar": true,
-    "asarUnpack": [ "**/dict/*" ],
+    "asarUnpack": [
+      "**/dict/*"
+    ],
     "artifactName": "pulse-sms-${version}-${arch}.${ext}",
     "mac": {
       "category": "public.app-category.utilities"
     },
-    "publish": [{
-      "provider": "github",
-      "owner": "klinker24",
-      "repo": "messenger-desktop",
-      "releaseType": "draft"
-    }]
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "klinker24",
+        "repo": "messenger-desktop",
+        "releaseType": "draft"
+      }
+    ]
   },
   "devDependencies": {
     "electron": "2.0.0-beta.7",
@@ -50,6 +54,7 @@
     "electron-updater": "2.20.1",
     "electron-hunspell": "0.0.7",
     "hazardous": "0.3.0",
-    "ws": "3.2.0"
+    "ws": "3.2.0",
+    "https-proxy-agent": "2.2.1"
   }
 }
