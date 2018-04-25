@@ -61,7 +61,7 @@
   function open(account_id) {
     closeWebSocket()
 
-    socket = new WebSocket("wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + account_id, {agent: notifier.getProxyAgent()})
+    socket = new WebSocket("wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + account_id, {agent: preparer.getProxyAgent()})
 
     socket.on("error", (err) =>  {
       console.log("ws error: " + err)
@@ -252,7 +252,7 @@
 
   function getJSON(urlToGet, successHandler) {
     var options = url.parse(urlToGet)
-    options.agent = notifier.getProxyAgent()
+    options.agent = preparer.getProxyAgent()
     var req = https.get(options, (response) => {
       var body = ''
       response.on('data', (d) => {
