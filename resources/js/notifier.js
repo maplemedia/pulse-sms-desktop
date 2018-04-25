@@ -20,6 +20,7 @@
   const path = require('path')
   const url = require('url')
   const https = require('https')
+  const HttpsProxyAgent = require('https-proxy-agent')
   const storage = require('electron-json-storage')
   const encrypt = require('./decrypt.js')
   const preferences = require('./preferences.js')
@@ -27,6 +28,7 @@
   let lastNotificationTime = new Date().getTime()
   let currentNotification = null
   let windowProvider = null
+  let proxyAgent = null
 
   var notify = (title, snippet, conversation_id, provider) => {
     windowProvider = provider
@@ -144,7 +146,8 @@
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data)
-        }
+        },
+        agent: getProxyAgent()
       }
 
       var req = https.request(options)
@@ -172,7 +175,8 @@
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data)
-        }
+        },
+        agent: getProxyAgent()
       }
 
       var req = https.request(options)
@@ -199,7 +203,8 @@
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data)
-        }
+        },
+        agent: getProxyAgent()
       }
 
       var req = https.request(options)
@@ -221,5 +226,17 @@
     return getRandomInt(1, 922337203685477)
   }
 
+  function getProxyAgent() {
+    // use the PULSE_PROXY or HTTPS_PROXY environment variable to determine if we should use a proxy
+    var envProxy = process.env.PULSE_PROXY || process.env.HTTPS_PROXY
+    if (!proxyAgent && envProxy) {
+      console.log("Attempting to get a proxy agent with \"" + envProxy + "\"")
+      proxyAgent = HttpsProxyAgent(envProxy)
+    }
+
+    return proxyAgent
+  }
+
   module.exports.notify = notify
+  module.exports.getProxyAgent = getProxyAgent
 }())

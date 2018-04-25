@@ -20,6 +20,7 @@
   const WebSocket = require('ws')
   const https = require('https')
   const storage = require('electron-json-storage')
+  const url = require('url');
   const preferences = require('./preferences.js')
   const decrypt = require('./decrypt.js')
   const notifier = require('./notifier.js')
@@ -60,7 +61,7 @@
   function open(account_id) {
     closeWebSocket()
 
-    socket = new WebSocket("wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + account_id)
+    socket = new WebSocket("wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + account_id, {agent: notifier.getProxyAgent()})
 
     socket.on("error", (err) =>  {
       console.log("ws error: " + err)
@@ -178,8 +179,8 @@
     setTimeout(() => {
       storage.get("account_id", (error, id) => {
         if (!error && id.length != 0) {
-          var url = "https://api.messenger.klinkerapps.com/api/v1/conversations/unread_count?account_id=" + id
-          getJSON(url, (unread) => {
+          var urlToGet = "https://api.messenger.klinkerapps.com/api/v1/conversations/unread_count?account_id=" + id
+          getJSON(urlToGet, (unread) => {
             if (typeof unread !== "undefined" && unread != null) {
               try {
                 if (process.platform === 'win32' && tray != null) {
@@ -249,8 +250,10 @@
     }
   }
 
-  function getJSON(url, successHandler) {
-    var req = https.get(url, (response) => {
+  function getJSON(urlToGet, successHandler) {
+    var options = url.parse(urlToGet)
+    options.agent = notifier.getProxyAgent()
+    var req = https.get(options, (response) => {
       var body = ''
       response.on('data', (d) => {
         body += d
