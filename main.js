@@ -54,12 +54,15 @@ app.on('before-quit', () => {
   app.exit(0)
 })
 
-crashReporter.start({
-  productName: "messenger",
-  companyName: "messenger-desktop",
-  submitURL: "https://messenger-desktop.sp.backtrace.io:6098/post?format=minidump&token=6b041aff41e611b0cbd7c098dba17a179459092c02601691d7261944d0f5705e",
-  uploadToServer: true
-})
+try {
+  crashReporter.start({
+    productName: "messenger",
+    companyName: "messenger-desktop",
+    submitURL: "https://messenger-desktop.sp.backtrace.io:6098/post?format=minidump&token=6b041aff41e611b0cbd7c098dba17a179459092c02601691d7261944d0f5705e",
+    uploadToServer: true
+  })
+} catch (err) { }
+
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
   const dialogOpts = {
