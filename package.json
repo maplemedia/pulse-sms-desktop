@@ -9,7 +9,7 @@
     "dist": "electron-builder build",
     "postinstall": "electron-builder install-app-deps"
   },
-  "repository": "https://github.com/klinker41/messenger-chrome",
+  "repository": "https://github.com/klinker24/messenger-desktop",
   "keywords": [
     "pulse",
     "sms",
@@ -44,7 +44,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "2.0.0-beta.2",
+    "electron": "2.0.0-beta.8",
     "electron-builder": "20.8.1"
   },
   "dependencies": {
