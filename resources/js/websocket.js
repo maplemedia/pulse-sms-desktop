@@ -136,8 +136,14 @@
       if (typeof result === "undefined" || result == null) {
         return
       }
+      
+      var aesKey = null;
 
-      var aesKey = decrypt.buildAesKey(result.account_id, result.hash, result.salt)
+      try {
+        aesKey = encrypt.buildAesKey(result.account_id, result.hash, result.salt)
+      } catch (err) {
+        return
+      }
 
       try {
         message.data = decrypt.decrypt(message.data, aesKey)

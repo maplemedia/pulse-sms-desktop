@@ -124,7 +124,14 @@
   function sendMessage(text, conversation_id) {
     console.log("sending message: " + text)
     storage.getMany(["account_id", "hash", "salt"], (error, result) => {
-      var aesKey = encrypt.buildAesKey(result.account_id, result.hash, result.salt)
+      var aesKey = null;
+
+      try {
+        aesKey = encrypt.buildAesKey(result.account_id, result.hash, result.salt)
+      } catch (err) {
+        return
+      }
+
       var data = JSON.stringify({
         account_id: result.account_id,
         device_id: generateId(),
