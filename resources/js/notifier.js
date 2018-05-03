@@ -77,7 +77,12 @@
       var link = "https://messenger.klinkerapps.com/messages.html?conversation_id=" + conversation_id
 
       if (windowProvider.getWindow() !== null) {
-        windowProvider.getBrowserView().webContents.loadURL(link)
+        windowProvider.getBrowserView().webContents.executeJavaScript('$("#' + conversation_id + '").click().length', true).then((length) => {
+          if (length == 0) {
+            windowProvider.getBrowserView().webContents.loadURL(link)
+          }
+        })
+        
         windowProvider.getWindow().show()
         windowProvider.getWindow().focus()
 
@@ -85,7 +90,7 @@
           app.dock.show()
         }
       } else {
-        createWindow(link)
+        createWindow(link, conversation_id)
       }
     })
 
@@ -101,7 +106,7 @@
     }
   }
 
-  function createWindow(link) {
+  function createWindow(link, conversation_id) {
     windowProvider.createMainWindow()
     setTimeout(() => {
       windowProvider.getBrowserView().webContents.loadURL(link)
