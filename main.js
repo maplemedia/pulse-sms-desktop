@@ -17,16 +17,18 @@
 const { app, Tray, Menu, dialog, crashReporter } = require('electron')
 const { autoUpdater } = require("electron-updater")
 
-const storage = require('electron-json-storage')
-const windowProvider = require('./resources/js/window-provider.js')
-const webSocket = require('./resources/js/websocket.js')
-const menu = require('./resources/js/menu.js')
-const preferences = require('./resources/js/preferences.js')
+let windowProvider = null
+let webSocket = null
+let menu = null
 
 let mainWindow = null
 let tray = null
 
 var shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+  if (windowProvider == null) {
+    initialize()
+  }
+
   windowProvider.getWindow().show()
   setTimeout(() => {
     windowProvider.getBrowserView().webContents.executeJavaScript("try { reloadUpdatedConversations() } catch (err) { }")
@@ -49,8 +51,10 @@ app.on('window-all-closed', () => {
 })
 
 app.on('before-quit', () => {
-  // might cause issues in the future as before-quit and will-quit events are not called
-  webSocket.closeWebSocket()
+  if (webSocket != null) {
+    webSocket.closeWebSocket()
+  }
+
   app.exit(0)
 })
 
@@ -89,6 +93,8 @@ autoUpdater.on('error', message => {
 })
 
 function createWindow() {
+  initialize()
+
   if (windowProvider.getWindow() === null) {
     mainWindow = windowProvider.createMainWindow()
     tray = menu.buildTray(windowProvider, webSocket)
@@ -110,6 +116,20 @@ function createWindow() {
   }
 
   autoUpdater.checkForUpdates()
+}
+
+function initialize() {
+  if (menu == null) {
+    menu = require('./resources/js/menu.js')
+  }
+
+  if (webSocket == null) {
+    webSocket = require('./resources/js/websocket.js')
+  }
+
+  if (windowProvider == null) {
+    windowProvider = require('./resources/js/window-provider.js')
+  }
 }
 
 function openWebSocket() {
