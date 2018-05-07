@@ -181,6 +181,19 @@
       })
     }
 
+    if (process.platform === 'win32') {
+      template[0].submenu.push({
+        label: 'Auto-Open at Login',
+        type: 'checkbox',
+        checked: preferences.openAtLogin(),
+        click() {
+          let autoOpen = !preferences.openAtLogin()
+          preferences.toggleOpenAtLogin()
+          app.setLoginItemSettings({ openAtLogin: autoOpen })
+        }
+      })
+    }
+
     if (process.platform === 'darwin') {
       const name = require('electron').app.getName()
       template.unshift({

@@ -20,6 +20,7 @@ const { autoUpdater } = require("electron-updater")
 let windowProvider = null
 let webSocket = null
 let menu = null
+let preferences = null
 
 let mainWindow = null
 let tray = null
@@ -66,7 +67,6 @@ try {
     uploadToServer: true
   })
 } catch (err) { }
-
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
   const dialogOpts = {
@@ -116,6 +116,9 @@ function createWindow() {
   }
 
   autoUpdater.checkForUpdates()
+  if (process.platform === 'win32') {
+    app.setLoginItemSettings({ openAtLogin: preferences.openAtLogin() })
+  }
 }
 
 function initialize() {
@@ -129,6 +132,10 @@ function initialize() {
 
   if (windowProvider == null) {
     windowProvider = require('./resources/js/window-provider.js')
+  }
+
+  if (preferences == null) {
+    preferences = require('./resources/js/preferences.js')
   }
 }
 
