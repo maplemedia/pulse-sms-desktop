@@ -55,7 +55,7 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
       noGui = false;
     }
 
-    if (app.getLocale().indexOf("en") >= 0) {
+    if (app.getLocale().indexOf("en") >= 0 && preferences.useSpellcheck()) {
       browserView = new BrowserView( { webPreferences: { nodeIntegration: false, preload: path.join(__dirname, 'spellcheck-preparer.js') } } )
     } else {
       browserView = new BrowserView( { webPreferences: { nodeIntegration: false } } )

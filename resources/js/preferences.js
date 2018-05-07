@@ -69,6 +69,7 @@
   const NOTIFICATION_SENDER_PREVIEWS = 'notification-sender-previews'
   const NOTIFICATION_MESSAGE_PREVIEWS = 'notification-message-previews'
   const BADGE_DOCK_ICON = 'badge-dock-icon'
+  const USE_SPELLCHECK = 'use-spellcheck'
   const MINIMIZE_TO_TRAY = 'minimize-to-tray'
 
   var shouldShowNotifications = () => {
@@ -91,6 +92,10 @@
     return !settings.has(BADGE_DOCK_ICON) || settings.get(BADGE_DOCK_ICON) === "true"
   }
 
+  var shouldUseSpellcheck = () => {
+    return !settings.has(USE_SPELLCHECK) || settings.get(USE_SPELLCHECK) === "true"
+  }
+
   var shouldMinimizeToTray = () => {
     return !settings.has(MINIMIZE_TO_TRAY) || settings.get(MINIMIZE_TO_TRAY) === "true"
   }
@@ -110,6 +115,7 @@
   module.exports.notificationSenderPreviews = shouldDisplayNotificationSenderPreviews
   module.exports.notificationMessagePreviews = shouldDisplayNotificationMessagePreviews
   module.exports.badgeDockIcon = shouldBadgeDockIcon
+  module.exports.useSpellcheck = shouldUseSpellcheck
   module.exports.minimizeToTray = shouldMinimizeToTray
 
   module.exports.toggleAutoHideMenuBar = () => { togglePreference(AUTO_HIDE_MENU_BAR, shouldAutoHideMenuBar) }
@@ -118,5 +124,6 @@
   module.exports.toggleNotificationSenderPreviews = () => { togglePreference(NOTIFICATION_SENDER_PREVIEWS, shouldDisplayNotificationSenderPreviews) }
   module.exports.toggleNotificationMessagePreviews = () => { togglePreference(NOTIFICATION_MESSAGE_PREVIEWS, shouldDisplayNotificationMessagePreviews) }
   module.exports.toggleBadgeDockIcon = () => { togglePreference(BADGE_DOCK_ICON, shouldBadgeDockIcon) }
+  module.exports.toggleUseSpellcheck = () => { togglePreference(USE_SPELLCHECK, shouldUseSpellcheck) }
   module.exports.toggleMinimizeToTray = () => { togglePreference(MINIMIZE_TO_TRAY, shouldMinimizeToTray) }
 }())

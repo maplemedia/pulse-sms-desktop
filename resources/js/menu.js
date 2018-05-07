@@ -15,7 +15,7 @@
  */
 
 (function() {
-  const { BrowserView, Menu, Tray, app } = require('electron')
+  const { BrowserView, Menu, Tray, dialog, app } = require('electron')
 
   const path = require('path')
   const preferences = require('./preferences.js')
@@ -151,6 +151,35 @@
         }
       }
     })
+
+    if (app.getLocale().indexOf("en") > -1) {
+      template[0].submenu.push({
+        label: 'Use Spellcheck',
+        type: 'checkbox',
+        checked: preferences.useSpellcheck(),
+        click() {
+          let useIt = !preferences.useSpellcheck()
+          preferences.toggleUseSpellcheck()
+
+          const dialogOpts = {
+            type: 'info',
+            buttons: ['Restart', 'Later'],
+            title: 'App Restart Required',
+            message: "This preference will not be applied until the app is restarted.",
+            detail: 'Hit \"Restart\", then re-open the app, to apply the preference.'
+          }
+
+          try {
+            dialog.showMessageBox(dialogOpts, (response) => {
+              if (response === 0) {
+                webSocket.closeWebSocket()
+                app.exit(0)
+              }
+            })
+          } catch (err) { }
+        }
+      })
+    }
 
     if (process.platform === 'darwin') {
       const name = require('electron').app.getName()
