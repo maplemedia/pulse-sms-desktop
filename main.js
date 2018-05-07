@@ -73,8 +73,8 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
     type: 'info',
     buttons: ['Install', 'Later'],
     title: 'Pulse Update',
-    message: releaseName,
-    detail: 'A new version has been downloaded. Hit install, then re-open the app, to automatically apply the update.'
+    message: 'A new version has been downloaded.',
+    detail: 'Hit install, then re-open the app, to automatically apply the update.'
   }
 
   try {
