@@ -51,7 +51,7 @@ $ ./node_modules/.bin/electron-builder build --linux deb AppImage
 
 ## Contributing
 
-Please fork this repository and contribute back using [pull requests](https://github.com/klinker24/messenger-desktop/pulls). Features can be requested using issues on our Pulse platform issue tracker, rather than creating issues directly on this repo: https://github.com/klinker-apps/messenger-issues.
+Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/messenger-desktop/pulls). Features can be requested using issues on our Pulse platform issue tracker, rather than creating issues directly on this repo: https://github.com/klinker-apps/messenger-issues.
 
 ## License
 

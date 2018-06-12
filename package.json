@@ -9,7 +9,7 @@
     "dist": "electron-builder build",
     "postinstall": "electron-builder install-app-deps"
   },
-  "repository": "https://github.com/klinker24/messenger-desktop",
+  "repository": "https://github.com/klinker-apps/messenger-desktop",
   "keywords": [
     "pulse",
     "sms",
@@ -37,7 +37,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "klinker24",
+        "owner": "klinker-apps",
         "repo": "messenger-desktop",
         "releaseType": "draft"
       }
