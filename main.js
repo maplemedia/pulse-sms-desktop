@@ -25,7 +25,8 @@ let preferences = null
 let mainWindow = null
 let tray = null
 
-var shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+app.requestSingleInstanceLock()
+app.on('second-instance', () => {
   if (windowProvider == null) {
     initialize()
   }
@@ -35,11 +36,6 @@ var shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
     windowProvider.getBrowserView().webContents.executeJavaScript("try { reloadUpdatedConversations() } catch (err) { }")
   }, 1000)
 })
-
-if (shouldQuit) {
-  app.quit()
-  return
-}
 
 app.setAppUserModelId("xyz.klinker.messenger")
 app.on('ready', createWindow)
