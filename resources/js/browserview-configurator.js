@@ -23,7 +23,7 @@
   var prepare = (window, browser) => {
     browser.setBounds( { x: 0, y: 0, width: window.getBounds().width, height: window.getBounds().height - getTitleBarSize(window) } )
     browser.setAutoResize( { width: true, height: true } )
-    browser.webContents.loadURL('https://messenger.klinkerapps.com/login.html')
+    browser.webContents.loadURL('https://pulsesms.app')
 
     browser.webContents.on('dom-ready', function (event) {
       websocketPreparer.prepare(browser)
