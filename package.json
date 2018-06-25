@@ -44,8 +44,13 @@
     ]
   },
   "devDependencies": {
+<<<<<<< HEAD
     "electron": "2.0.2",
     "electron-builder": "20.15.1"
+=======
+    "electron": "3.0.0-beta.1",
+    "electron-builder": "20.16.0"
+>>>>>>> 7a646d9... start testing pulsesms.app instead of messenger.klinkerapps.com
   },
   "dependencies": {
     "electron-json-storage": "3.1.0",

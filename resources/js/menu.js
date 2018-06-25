@@ -93,7 +93,7 @@
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
         click(item, focusedWindow) {
-          windowProvider.getBrowserView().webContents.loadURL('https://messenger.klinkerapps.com/')
+          windowProvider.getBrowserView().webContents.loadURL('https://pulsesms.app')
         }
       }, {
         label: 'Toggle Developer Tools',
@@ -315,13 +315,13 @@
 
   function showPoupWindow(windowProvider) {
     if (windowProvider.getReplyWindow() !== null) {
-      windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://messenger.klinkerapps.com')")
+      windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://pulsesms.app')")
       windowProvider.getReplyWindow().show()
       windowProvider.getReplyWindow().focus()
     } else {
       windowProvider.createReplyWindow()
       setTimeout(() => {
-        windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://messenger.klinkerapps.com')")
+        windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://pulsesms.app')")
       }, 500)
     }
   }

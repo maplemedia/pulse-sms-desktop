@@ -74,7 +74,7 @@
     })
 
     currentNotification.on('click', (event) => {
-      var link = "https://messenger.klinkerapps.com/messages.html?conversation_id=" + conversation_id
+      var link = "https://pulsesms.app/thread/" + conversation_id
 
       if (windowProvider.getWindow() !== null) {
         windowProvider.getBrowserView().webContents.executeJavaScript('$("#' + conversation_id + '").click().length', true).then((length) => {
@@ -82,7 +82,7 @@
             windowProvider.getBrowserView().webContents.loadURL(link)
           }
         })
-        
+
         windowProvider.getWindow().show()
         windowProvider.getWindow().focus()
 
