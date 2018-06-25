@@ -118,7 +118,7 @@
     }, {
       role: 'help',
       submenu: [
-        { label: require('electron').app.getVersion() },
+        { label: require('electron').app.getVersion(), click() { require('electron').shell.openExternal('https://github.com/klinker-apps/messenger-desktop/releases') } } },
         { label: 'Get Help', click() { require('electron').shell.openExternal('https://messenger.klinkerapps.com/help') } },
         { label: 'Platform Support', click() { require('electron').shell.openExternal('https://messenger.klinkerapps.com/overview') } },
         { label: 'Get it on Google Play', click() { require('electron').shell.openExternal('https://play.google.com/store/apps/details?id=xyz.klinker.messenger') } }
