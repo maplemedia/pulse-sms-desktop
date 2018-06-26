@@ -77,7 +77,7 @@
       var link = "https://pulsesms.app/thread/" + conversation_id
 
       if (windowProvider.getWindow() !== null) {
-        windowProvider.getBrowserView().webContents.executeJavaScript('$("#' + conversation_id + '").click().length', true).then((length) => {
+        windowProvider.getBrowserView().webContents.executeJavaScript('document.getElementById("' + conversation_id + '").click().length', true).then((length) => {
           if (length == 0) {
             windowProvider.getBrowserView().webContents.loadURL(link)
           }
@@ -94,6 +94,7 @@
       }
     })
 
+    console.log("showed notification");
     currentNotification.show()
   }
 

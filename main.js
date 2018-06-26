@@ -31,9 +31,6 @@ var shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
   }
 
   windowProvider.getWindow().show()
-  setTimeout(() => {
-    windowProvider.getBrowserView().webContents.executeJavaScript("try { reloadUpdatedConversations() } catch (err) { }")
-  }, 1000)
 })
 
 if (shouldQuit) {
@@ -109,10 +106,6 @@ function createWindow() {
     windowProvider.getWindow().show()
     webSocket.setWindowProvider(windowProvider)
     menu.buildMenu(windowProvider, tray, webSocket)
-
-    setTimeout(() => {
-      windowProvider.getBrowserView().webContents.executeJavaScript("try { reloadUpdatedConversations() } catch (err) { }")
-    }, 1000)
   }
 
   autoUpdater.checkForUpdates()

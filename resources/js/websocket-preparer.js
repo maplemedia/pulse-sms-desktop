@@ -23,17 +23,20 @@
   let proxyAgent = null
 
   var prepare = (browser) => {
-    browser.webContents.executeJavaScript('accountId', true).then((id) => {
+    browser.webContents.executeJavaScript('localStorage.getItem("account_id")', true).then((id) => {
+      id = id.replace(/\"/g, "")
       storage.set("account_id", id)
       log("saved account id: " + id)
     })
 
     browser.webContents.executeJavaScript('localStorage.getItem("hash")', true).then((hash) => {
+      hash = hash.replace(/\"/g, "")
       storage.set("hash", hash)
       log("saved hash: " + hash)
     })
 
     browser.webContents.executeJavaScript('localStorage.getItem("salt")', true).then((salt) => {
+      salt = salt.replace(/\"/g, "")
       storage.set("salt", salt)
       log("saved salt: " + salt)
     })
