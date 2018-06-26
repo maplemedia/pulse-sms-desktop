@@ -32,9 +32,6 @@ app.on('second-instance', () => {
   }
 
   windowProvider.getWindow().show()
-  setTimeout(() => {
-    windowProvider.getBrowserView().webContents.executeJavaScript("try { reloadUpdatedConversations() } catch (err) { }")
-  }, 1000)
 })
 
 app.setAppUserModelId("xyz.klinker.messenger")
@@ -105,10 +102,6 @@ function createWindow() {
     windowProvider.getWindow().show()
     webSocket.setWindowProvider(windowProvider)
     menu.buildMenu(windowProvider, tray, webSocket)
-
-    setTimeout(() => {
-      windowProvider.getBrowserView().webContents.executeJavaScript("try { reloadUpdatedConversations() } catch (err) { }")
-    }, 1000)
   }
 
   autoUpdater.checkForUpdates()

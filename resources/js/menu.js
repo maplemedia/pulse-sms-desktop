@@ -304,10 +304,6 @@
       if (process.platform === 'darwin') {
         app.dock.show()
       }
-
-      setTimeout(() => {
-        windowProvider.getBrowserView().webContents.executeJavaScript("try { reloadUpdatedConversations() } catch (err) { }")
-      }, 1000)
     } else {
       windowProvider.createMainWindow()
     }
