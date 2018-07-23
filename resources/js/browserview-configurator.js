@@ -32,6 +32,7 @@
     browser.webContents.on('new-window', (event, url) => {
       try {
         require('electron').shell.openExternal(url)
+        event.preventDefault()
       } catch (error) {
         console.log("Ignoring " + url + " due to " + error.message)
       }
