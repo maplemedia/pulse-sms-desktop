@@ -5,4 +5,4 @@
 **/*.p12
 **/*.lock
 **/*-lock.json
-yarn-error.log
+**/*.log

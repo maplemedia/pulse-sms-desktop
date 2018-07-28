@@ -25,13 +25,21 @@
     browser.setAutoResize( { width: true, height: true } )
     browser.webContents.loadURL('https://pulsesms.app')
 
-    browser.webContents.on('dom-ready', function (event) {
+    browser.webContents.on('dom-ready', (event) => {
       websocketPreparer.prepare(browser)
+    })
+
+    browser.webContents.on('did-fail-load', (event) => {
+      console.log("failed loading webpage");
+      setTimeout(() => {
+        browser.webContents.loadURL('https://pulsesms.app')
+      }, 2000);
     })
 
     browser.webContents.on('new-window', (event, url) => {
       try {
         require('electron').shell.openExternal(url)
+        event.preventDefault()
       } catch (error) {
         console.log("Ignoring " + url + " due to " + error.message)
       }
