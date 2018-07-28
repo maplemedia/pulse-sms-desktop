@@ -5,3 +5,4 @@
 **/*.p12
 **/*.lock
 **/*-lock.json
+**/*.log
