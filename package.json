@@ -1,6 +1,6 @@
 {
   "name": "pulse-sms",
-  "version": "v3.1.0",
+  "version": "v3.1.1",
   "description": "A native desktop implementation of Pulse",
   "main": "main.js",
   "scripts": {
@@ -44,7 +44,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "3.0.0",
+    "electron": "3.0.1",
     "electron-builder": "20.28.4"
   },
   "dependencies": {
