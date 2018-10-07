@@ -25,7 +25,13 @@ let preferences = null
 let mainWindow = null
 let tray = null
 
-app.requestSingleInstanceLock()
+const gotLock = app.requestSingleInstanceLock()
+
+if (!gotLock) {
+  app.exit(0)
+  return;
+}
+
 app.on('second-instance', () => {
   if (windowProvider == null) {
     initialize()

@@ -74,7 +74,7 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
     })
 
     mainWindow.on('closed', (event) => {
-      setWindow(null)
+      event.preventDefault()
     })
 
     setWindow(mainWindow)
