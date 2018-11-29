@@ -110,7 +110,7 @@ function createWindow() {
     menu.buildMenu(windowProvider, tray, webSocket)
   }
 
-  autoUpdater.checkForUpdates()
+  autoUpdater.checkForUpdatesAndNotify();
   if (process.platform === 'win32') {
     app.setLoginItemSettings({ openAtLogin: preferences.openAtLogin() })
   }
