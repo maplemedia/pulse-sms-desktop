@@ -1,6 +1,6 @@
 {
   "name": "pulse-sms",
-  "version": "v3.1.4",
+  "version": "v3.2.0",
   "description": "A native desktop implementation of Pulse",
   "main": "main.js",
   "scripts": {
@@ -44,14 +44,14 @@
     ]
   },
   "devDependencies": {
-    "electron": "3.0.10",
-    "electron-builder": "20.28.4"
+    "electron": "4.0.0",
+    "electron-builder": "20.38.4"
   },
   "dependencies": {
     "electron-json-storage": "3.1.0",
-    "electron-window-state": "4.1.1",
+    "electron-window-state": "5.0.3",
     "electron-settings": "3.1.4",
-    "electron-updater": "^3.0.3",
+    "electron-updater": "^4.0.7",
     "electron-hunspell": "0.0.7",
     "hazardous": "0.3.0",
     "ws": "3.2.0",
