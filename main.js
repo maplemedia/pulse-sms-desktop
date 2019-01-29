@@ -80,6 +80,8 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
     dialog.showMessageBox(dialogOpts, (response) => {
       if (response === 0) {
         webSocket.closeWebSocket()
+        autoUpdater.quitAndInstall()
+        
         app.exit(0)
       }
     })
@@ -110,7 +112,7 @@ function createWindow() {
     menu.buildMenu(windowProvider, tray, webSocket)
   }
 
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
   if (process.platform === 'win32') {
     app.setLoginItemSettings({ openAtLogin: preferences.openAtLogin() })
   }
