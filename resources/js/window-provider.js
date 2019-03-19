@@ -39,12 +39,14 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
         title: "Pulse SMS", icon: path.join(__dirname, '../../build/icon.png'),
         show: !noGui, x: mainWindowState.x, y: mainWindowState.y,
         width: mainWindowState.width, height: mainWindowState.height,
+        minWidth: 300, minHeight: 300
       }
     } catch (err) {
       bounds = {
         title: "Pulse SMS", icon: path.join(__dirname, '../../build/icon.png'),
         show: !noGui, x: 0, y: 0,
         width: 1000, height: 750,
+        minWidth: 300, minHeight: 300
       }
     }
 
@@ -87,6 +89,8 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
     let window = new BrowserWindow({
       width: 410,
       height: 550,
+      minWidth: 300,
+      minHeight: 300,
       x: 0,
       y: 0
     })
