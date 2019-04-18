@@ -252,7 +252,7 @@
     }
 
     if (!conversation.mute) {
-      notifier.notify(title, snippet, message.conversation_id, windowProvider)
+      notifier.notify(title, snippet, message.conversation_id, conversation.private_notifications, windowProvider)
     }
   }
 

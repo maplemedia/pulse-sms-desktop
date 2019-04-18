@@ -29,7 +29,7 @@
   let currentNotification = null
   let windowProvider = null
 
-  var notify = (title, snippet, conversation_id, provider) => {
+  var notify = (title, snippet, conversation_id, is_private, provider) => {
     windowProvider = provider
 
     if (!shouldProvideNotification() || title == null || snippet == null || title.length == 0) {
@@ -45,15 +45,15 @@
       snippet = ""
     }
 
-    genericNotification(title, snippet, conversation_id)
+    genericNotification(title, snippet, conversation_id, is_private)
   }
 
-  function genericNotification(title, snippet, conversation_id) {
+  function genericNotification(title, snippet, conversation_id, is_private) {
     var options = {
       title: title,
       body: snippet,
       silent: !preferences.notificationSounds(),
-      hasReply: true,
+      hasReply: !is_private,
       replyPlaceholder: "Reply to " + title
     }
 
@@ -75,6 +75,10 @@
 
     currentNotification.on('click', (event) => {
       var link = "https://pulsesms.app/thread/" + conversation_id
+
+      if (is_private) {
+        link = "https://pulsesms.app/passcode"
+      }
 
       if (windowProvider.getWindow() !== null) {
         windowProvider.getBrowserView().webContents.executeJavaScript('document.getElementById("' + conversation_id + '").click().length', true).then((length) => {
