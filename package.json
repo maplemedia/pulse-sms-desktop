@@ -53,7 +53,7 @@
     "electron-updater": "^4.0.7",
     "electron-window-state": "5.0.3",
     "https-proxy-agent": "2.2.1",
-    "spellchecker": "^3.5.2",
+    "spellchecker": "github:discordapp/node-spellchecker",
     "ws": "3.2.0"
   }
 }
