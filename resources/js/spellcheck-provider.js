@@ -25,7 +25,7 @@
       let hasSuggestion = isTextInput && text.misspelledWord && text.misspelledWord.length >= 1
 
       if (hasSuggestion) {
-        browser.webContents.executeJavaScript('window.spellCheck.getSuggestion("' + text.misspelledWord + '")', true).then((suggestions) => {
+        browser.webContents.executeJavaScript('window.spellCheck.getCorrectionsForMisspelling("' + text.misspelledWord + '")', true).then((suggestions) => {
           suggestions.forEach((value) => {
             let item = new MenuItem({
               label: value,

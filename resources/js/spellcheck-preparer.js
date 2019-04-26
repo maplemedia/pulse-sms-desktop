@@ -16,6 +16,7 @@
 const { webFrame } = require('electron')
 const spellChecker = require('spellchecker')
 
+window.spellCheck = spellChecker
 webFrame.setSpellCheckProvider('en-US', {
   spellCheck (words, callback) {
     setTimeout(() => {
