@@ -13,20 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+const { webFrame } = require('electron')
+const spellChecker = require('spellchecker')
 
- const { SpellCheckerProvider } = require('electron-hunspell')
-
-const hazardous = require ('hazardous')
-const path = require('path')
-
-window.spellCheck = new SpellCheckerProvider()
-window.spellCheck.initialize()
-
-setTimeout(() => {
-  window.spellCheck.loadDictionary('en',
-    path.join(__dirname, '../dict/en-US.dic'),
-    path.join(__dirname, '../dict/en-US.aff')
-  )
-
-  window.spellCheck.switchDictionary('en')
-}, 3000)
+webFrame.setSpellCheckProvider('en-US', {
+  spellCheck (words, callback) {
+    setTimeout(() => {
+      const spellchecker = require('spellchecker')
+      const misspelled = words.filter(x => spellchecker.isMisspelled(x))
+      callback(misspelled)
+    }, 0)
+  }
+})

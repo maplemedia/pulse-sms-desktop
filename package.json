@@ -49,12 +49,11 @@
   },
   "dependencies": {
     "electron-json-storage": "3.1.0",
-    "electron-window-state": "5.0.3",
     "electron-settings": "3.1.4",
     "electron-updater": "^4.0.7",
-    "electron-hunspell": "0.0.7",
-    "hazardous": "0.3.0",
-    "ws": "3.2.0",
-    "https-proxy-agent": "2.2.1"
+    "electron-window-state": "5.0.3",
+    "https-proxy-agent": "2.2.1",
+    "spellchecker": "^3.5.2",
+    "ws": "3.2.0"
   }
 }
