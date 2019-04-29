@@ -26,3 +26,11 @@ webFrame.setSpellCheckProvider('en-US', {
     }, 0)
   }
 })
+
+// Electron does weird things with contractions: https://github.com/electron/electron/issues/1005
+// I am just adding a few common ones, so that they don't get marked as misspelled.
+spellChecker.add('doesn')
+spellChecker.add('couldn')
+spellChecker.add('wouldn')
+spellChecker.add('shouldn')
+spellChecker.add('isn')
