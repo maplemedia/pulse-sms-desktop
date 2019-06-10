@@ -87,6 +87,7 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
 
   var createReplyWindow = () => {
     let window = new BrowserWindow({
+      title: "Pulse SMS Popup", icon: path.join(__dirname, '../../build/icon.png'),
       width: 410, height: 550,
       minWidth: 300, minHeight: 300,
       x: 0, y: 0

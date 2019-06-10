@@ -311,14 +311,10 @@
 
   function showPoupWindow(windowProvider) {
     if (windowProvider.getReplyWindow() !== null) {
-      windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://pulsesms.app')")
       windowProvider.getReplyWindow().show()
       windowProvider.getReplyWindow().focus()
     } else {
       windowProvider.createReplyWindow()
-      setTimeout(() => {
-        windowProvider.getReplyWindow().webContents.executeJavaScript("document.getElementById('messenger').loadURL('https://pulsesms.app')")
-      }, 500)
     }
   }
 
