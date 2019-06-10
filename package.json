@@ -32,7 +32,16 @@
     ],
     "artifactName": "pulse-sms-${version}-${arch}.${ext}",
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "icon": "build/icon.png",
+      "type": "distribution"
+    },
+    "win": {
+      "icon": "build/icon.png"
+    },
+    "linux": {
+      "icon": "build",
+      "category": "Utility"
     },
     "publish": [
       {
