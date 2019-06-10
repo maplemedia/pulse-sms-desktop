@@ -87,19 +87,20 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
 
   var createReplyWindow = () => {
     let window = new BrowserWindow({
-      width: 410,
-      height: 550,
-      minWidth: 300,
-      minHeight: 300,
-      x: 0,
-      y: 0
+      width: 410, height: 550,
+      minWidth: 300, minHeight: 300,
+      x: 0, y: 0
     })
 
-    window.loadURL(url.format({
-      pathname: path.join(__dirname, '../../index.html'),
-      protocol: 'file:',
-      slashes: true
-    }))
+    let browserView;
+    if (app.getLocale().indexOf("en") >= 0 && preferences.useSpellcheck()) {
+      browserView = new BrowserView( { webPreferences: { nodeIntegration: false, preload: path.join(__dirname, 'spellcheck-preparer.js') } } )
+    } else {
+      browserView = new BrowserView( { webPreferences: { nodeIntegration: false } } )
+    }
+
+    window.setBrowserView(browserView)
+    configurator.prepare(window, browserView)
 
     window.on('close', (event) => {
       setReplyWindow(null)
