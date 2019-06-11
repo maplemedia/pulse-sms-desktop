@@ -33,7 +33,7 @@ if (!gotLock) {
 }
 
 app.on('second-instance', () => {
-  if (windowProvider == null) {
+  if (windowProvider == null || windowProvider.getWindow() == null) {
     initialize()
   }
 
