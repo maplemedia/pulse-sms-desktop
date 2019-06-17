@@ -1,6 +1,6 @@
 {
   "name": "pulse-sms",
-  "version": "v3.4.4",
+  "version": "v3.4.5",
   "description": "A native desktop implementation of Pulse",
   "main": "main.js",
   "scripts": {
