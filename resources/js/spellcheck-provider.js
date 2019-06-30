@@ -16,16 +16,17 @@
 
  (function() {
 
-  const { Menu, MenuItem } = require('electron')
+  const { app, dialog, Menu, MenuItem, shell } = require('electron')
+  const fs = require('fs')
 
   var prepareMenu = (window, browser) => {
-    browser.webContents.addListener('context-menu', (event, text) => {
+    browser.webContents.addListener('context-menu', (event, params) => {
       let menu = new Menu()
-      let isTextInput = text.isEditable || (text.inputFieldType && text.inputFieldType !== 'none')
-      let hasSuggestion = isTextInput && text.misspelledWord && text.misspelledWord.length >= 1
+      let isTextInput = params.isEditable || (params.inputFieldType && params.inputFieldType !== 'none')
+      let hasSuggestion = isTextInput && params.misspelledWord && params.misspelledWord.length >= 1
 
       if (hasSuggestion) {
-        browser.webContents.executeJavaScript('window.spellCheck.getCorrectionsForMisspelling("' + text.misspelledWord + '")', true).then((suggestions) => {
+        browser.webContents.executeJavaScript('window.spellCheck.getCorrectionsForMisspelling("' + params.misspelledWord + '")', true).then((suggestions) => {
           suggestions.forEach((value) => {
             let item = new MenuItem({
               label: value,
@@ -36,17 +37,46 @@
           })
 
           if (suggestions.length == 0) {
-            let item = new MenuItem({
-              label: "No suggestions available."
-            })
-
-            menu.append(item)
+            menu.append(new MenuItem({ label: "No suggestions available." }))
           }
 
+          menu.append(new MenuItem({ type: 'separator' }))
+          appendGenericContextMenu(menu, params, isTextInput)
           menu.popup(window, { async: true })
         })
+      } else {
+        appendGenericContextMenu(menu, params, isTextInput)
+
+        if (menu.items.length > 0) {
+          menu.popup(window, { async: true })
+        }
       }
     })
+  }
+
+  var appendGenericContextMenu = (menu, params, isTextInput) => {
+    if (params.selectionText) {
+      menu.append(new MenuItem({ role: 'copy' }))
+
+      if (isTextInput) {
+        menu.append(new MenuItem({ role: 'cut' }))
+      }
+    }
+
+    if (isTextInput) {
+      menu.append(new MenuItem({ role: 'paste' }))
+    }
+
+    if (params.linkText) {
+      menu.append(new MenuItem({ 
+        label: 'Open in Browser',
+        click: () => shell.openExternal(params.linkText)
+      }))
+    }
+    
+    if (params.mediaType === 'image') {
+      // menu item to save the image
+    }
   }
 
   module.exports.prepareMenu = prepareMenu
