@@ -13,28 +13,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-const { webFrame } = require('electron')
-const spellChecker = require('spellchecker')
 
-window.spellCheck = spellChecker
-webFrame.setSpellCheckProvider('en-US', {
-  spellCheck (words, callback) {
-    setTimeout(() => {
-      const spellchecker = require('spellchecker')
-      const misspelled = words.filter(x => spellchecker.isMisspelled(x))
-      callback(misspelled)
-    }, 0)
-  }
-})
+const { attachSpellCheckProvider, SpellCheckerProvider } = require('electron-hunspell')
+const fs = require('fs')
+const path = require('path')
 
-// Electron does weird things with contractions: https://github.com/electron/electron/issues/1005
-// I am just adding a few common ones, so that they don't get marked as misspelled.
-spellChecker.add('doesn')
-spellChecker.add('couldn')
-spellChecker.add('wouldn')
-spellChecker.add('shouldn')
-spellChecker.add('isn')
-spellChecker.add('didn')
-spellChecker.add('wasn')
-spellChecker.add('weren')
-spellChecker.add('would\'ve')
+const init = async () => {
+  const spellCheck = new SpellCheckerProvider();
+
+  window.spellCheck = spellCheck;
+  await spellCheck.initialize();
+
+  await spellCheck.loadDictionary(
+    'en',
+    fs.readFileSync(path.join(__dirname, '../dict/en-US.dic')),
+    fs.readFileSync(path.join(__dirname, '../dict/en-US.aff'))
+  );
+
+  const attached = await attachSpellCheckProvider(spellCheck);
+  setTimeout(async () => attached.switchLanguage('en'), 3000);
+};
+
+init();

@@ -20,30 +20,29 @@
   const fs = require('fs')
 
   var prepareMenu = (window, browser) => {
-    browser.webContents.addListener('context-menu', (event, params) => {
+    browser.webContents.addListener('context-menu', async (event, params) => {
       let menu = new Menu()
       let isTextInput = params.isEditable || (params.inputFieldType && params.inputFieldType !== 'none')
       let hasSuggestion = isTextInput && params.misspelledWord && params.misspelledWord.length >= 1
 
       if (hasSuggestion) {
-        browser.webContents.executeJavaScript('window.spellCheck.getCorrectionsForMisspelling("' + params.misspelledWord + '")', true).then((suggestions) => {
-          suggestions.forEach((value) => {
-            let item = new MenuItem({
-              label: value,
-              click: () => browser.webContents.replaceMisspelling(value)
-            })
-
-            menu.append(item)
+        const suggestions = await browser.webContents.executeJavaScript('window.spellCheck.getSuggestion("' + params.misspelledWord + '")');
+        suggestions.forEach((value) => {
+          let item = new MenuItem({
+            label: value,
+            click: () => browser.webContents.replaceMisspelling(value)
           })
 
-          if (suggestions.length == 0) {
-            menu.append(new MenuItem({ label: "No suggestions available." }))
-          }
-
-          menu.append(new MenuItem({ type: 'separator' }))
-          appendGenericContextMenu(menu, params, isTextInput)
-          menu.popup(window, { async: true })
+          menu.append(item)
         })
+
+        if (suggestions.length == 0) {
+          menu.append(new MenuItem({ label: "No suggestions available." }))
+        }
+
+        menu.append(new MenuItem({ type: 'separator' }))
+        appendGenericContextMenu(menu, params, isTextInput)
+        menu.popup(window, { async: true })
       } else {
         appendGenericContextMenu(menu, params, isTextInput)
 
