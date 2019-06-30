@@ -75,7 +75,18 @@
     }
     
     if (params.mediaType === 'image') {
-      // menu item to save the image
+      menu.append(new MenuItem({
+        label: 'Save Image As...',
+        click: () => {
+          const options = { defaultPath: app.getPath('downloads') + '/image.jpeg' }
+          dialog.showSaveDialog(null, options, (path) => {
+            if (path) {
+              const imageData = (params.linkURL || params.srcURL).replace(/^data:(image\/jpeg|undefined);base64,/, '')
+              fs.writeFile(path, imageData, 'base64', (err) => { })
+            }
+          });
+        }
+      }))
     }
   }
 
