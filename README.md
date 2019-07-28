@@ -53,9 +53,11 @@ $ ./node_modules/.bin/electron-builder build --linux deb AppImage
 
 Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/messenger-desktop/pulls). Features can be requested using issues on our Pulse platform issue tracker, rather than creating issues directly on this repo: https://github.com/klinker-apps/messenger-issues.
 
+This project was originally a JavaScript project and I am not a big fan of JavaScript. As such, the project now uses Typescript. Many things aren't structured in a very Typescript-y way. I will continue to improve this, as I have time. Pull requests would be more than welcome, to make the app more Typescript-y.
+
 ## License
 
-    Copyright 2018 Luke Klinker
+    Copyright 2019 Luke Klinker
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
