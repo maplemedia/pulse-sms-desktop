@@ -1,10 +1,13 @@
 {
   "name": "pulse-sms",
-  "version": "v3.5.0",
+  "version": "v4.0.0",
   "description": "A native desktop implementation of Pulse",
-  "main": "main.js",
+  "main": "built/main.js",
   "scripts": {
-    "start": "electron .",
+    "build": "tsc && cp -r src/assets built/assets",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "yarn run build && electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder build",
     "postinstall": "electron-builder install-app-deps"
@@ -53,8 +56,11 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^12.6.8",
     "electron": "5.0.6",
-    "electron-builder": "20.44.4"
+    "electron-builder": "20.44.4",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "electron-hunspell": "^1.0.0-beta.10",

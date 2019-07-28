@@ -27,7 +27,7 @@ $ yarn install
 2. Run the app:
 
 ```
-$ npm start
+$ yarn start
 ```
 
 The app will only run if you have shut down any other instances. To ensure that only one web socket connection is made and managed, only a single instance of Pulse is allowed to run. If you use `npm start` while another instance is running, it will simply display the window of that old instance, instead of starting the app.
@@ -37,7 +37,7 @@ The app will only run if you have shut down any other instances. To ensure that 
 To package the apps for each platform:
 
 ```
-$ yarn install
+$ yarn
 
 // MacOS (dmg)
 $ ./node_modules/.bin/electron-builder build --mac

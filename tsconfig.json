@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "allowJs": true,
+      "target": "es5",
+      "noImplicitAny": false,
+      "outDir": "built",
+      "module": "commonjs", 
+    },
+    "include": [
+      "src/**/*"
+    ]
+  }
