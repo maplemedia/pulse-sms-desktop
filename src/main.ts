@@ -17,9 +17,11 @@
 import { app, crashReporter, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 
+import PulseMenu from "./menu";
+
 let windowProvider = null;
-let webSocket = null;
 let menu = null;
+let webSocket = null;
 let preferences = null;
 
 let mainWindow = null;
@@ -122,12 +124,12 @@ function createWindow() {
 }
 
 function initialize() {
-  if (menu == null) {
-    menu = require("./menu.js");
-  }
-
   if (webSocket == null) {
     webSocket = require("./websocket/websocket.js");
+  }
+
+  if (menu == null) {
+    menu = new PulseMenu();
   }
 
   if (windowProvider == null) {
