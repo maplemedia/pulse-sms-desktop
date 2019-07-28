@@ -14,24 +14,24 @@
  *  limitations under the License.
  */
 
-const { attachSpellCheckProvider, SpellCheckerProvider } = require('electron-hunspell')
-const fs = require('fs')
-const path = require('path')
+import { attachSpellCheckProvider, SpellCheckerProvider } from "electron-hunspell";
+import * as fs from "fs";
+import * as path from "path";
 
 const init = async () => {
   const spellCheck = new SpellCheckerProvider();
 
-  window.spellCheck = spellCheck;
+  (window as any).spellCheck = spellCheck;
   await spellCheck.initialize();
 
   await spellCheck.loadDictionary(
-    'en',
-    fs.readFileSync(path.join(__dirname, 'assets/dict/en-US.dic')),
-    fs.readFileSync(path.join(__dirname, 'assets/dict/en-US.aff'))
+    "en",
+    fs.readFileSync(path.join(__dirname, "assets/dict/en-US.dic")),
+    fs.readFileSync(path.join(__dirname, "assets/dict/en-US.aff")),
   );
 
   const attached = await attachSpellCheckProvider(spellCheck);
-  setTimeout(async () => attached.switchLanguage('en'), 3000);
+  setTimeout(async () => attached.switchLanguage("en"), 3000);
 };
 
 init();

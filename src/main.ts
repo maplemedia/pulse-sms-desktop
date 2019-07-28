@@ -18,6 +18,7 @@ import { app, crashReporter, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 
 import PulseMenu from "./menu";
+import WindowProvider from "./window/window-provider";
 
 let windowProvider = null;
 let menu = null;
@@ -133,7 +134,7 @@ function initialize() {
   }
 
   if (windowProvider == null) {
-    windowProvider = require("./window/window-provider.js");
+    windowProvider = new WindowProvider();
   }
 
   if (preferences == null) {

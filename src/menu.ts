@@ -18,10 +18,11 @@ import { app, BrowserView, dialog, Menu, Tray } from "electron";
 import * as path from "path";
 
 import * as preferences from "./preferences.js";
-import * as browserviewPreparer from "./window/browserview-preparer.js";
+import BrowserviewPreparer from "./window/browserview-preparer";
 
 export default class PulseMenu {
 
+  private browserviewPreparer = new BrowserviewPreparer();
   private notificationPreferencesMenu: any = {
     label: "Notification Preferences",
     submenu: [{
@@ -287,7 +288,7 @@ export default class PulseMenu {
           windowProvider.getWindow().setAutoHideMenuBar(autoHide);
           windowProvider.getWindow().setMenuBarVisibility(!autoHide);
 
-          browserviewPreparer.prepare(windowProvider.getWindow(), windowProvider.getBrowserView());
+          this.browserviewPreparer.prepare(windowProvider.getWindow(), windowProvider.getBrowserView());
         },
         label: "Auto-hide Menu Bar",
         type: "checkbox",
