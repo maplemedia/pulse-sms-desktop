@@ -82,7 +82,9 @@ export default class SpellcheckProvider {
           dialog.showSaveDialog(null, options, (path) => {
             if (path) {
               const imageData = (params.linkURL || params.srcURL).replace(/^data:(image\/jpeg|undefined);base64,/, "");
-              fs.writeFile(path, imageData, "base64", (err) => { });
+              fs.writeFile(path, imageData, "base64", (err) => {
+                // no-op
+              });
             }
           });
         },

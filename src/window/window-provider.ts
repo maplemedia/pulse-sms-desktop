@@ -76,7 +76,7 @@ export default class WindowProvider {
       this.browserView = new BrowserView({
         webPreferences: {
           nodeIntegration: false,
-          preload: path.join(__dirname, "spellcheck-preparer.js"),
+          preload: path.join(__dirname, "../spellcheck/spellcheck-preparer.js"),
         },
       });
     } else {
@@ -126,7 +126,7 @@ export default class WindowProvider {
       browserView = new BrowserView({
         webPreferences: {
           nodeIntegration: false,
-          preload: path.join(__dirname, "spellcheck-preparer.js"),
+          preload: path.join(__dirname, "../spellcheck/spellcheck-preparer.js"),
         },
       });
     } else {
