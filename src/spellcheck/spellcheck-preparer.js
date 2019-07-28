@@ -26,8 +26,8 @@ const init = async () => {
 
   await spellCheck.loadDictionary(
     'en',
-    fs.readFileSync(path.join(__dirname, '../dict/en-US.dic')),
-    fs.readFileSync(path.join(__dirname, '../dict/en-US.aff'))
+    fs.readFileSync(path.join(__dirname, 'assets/dict/en-US.dic')),
+    fs.readFileSync(path.join(__dirname, 'assets/dict/en-US.aff'))
   );
 
   const attached = await attachSpellCheckProvider(spellCheck);

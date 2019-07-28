@@ -23,7 +23,7 @@
   const storage = require('electron-json-storage')
   const encrypt = require('./decrypt.js')
   const preferences = require('./preferences.js')
-  const preparer = require('./websocket-preparer.js')
+  const preparer = require('./websocket/websocket-preparer.js')
 
   let lastNotificationTime = new Date().getTime()
   let currentNotification = null
@@ -58,7 +58,7 @@
     }
 
     if (process.platform !== 'darwin') {
-      options.icon = path.join(__dirname, '../images/notification-icon.png')
+      options.icon = path.join(__dirname, 'assets/notification-icon.png')
     }
 
     if (currentNotification != null) {

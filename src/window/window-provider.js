@@ -21,8 +21,8 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
   const { BrowserWindow, BrowserView, ipcMain, app } = require('electron')
 
   const windowStateKeeper = require('electron-window-state')
-  const configurator = require('./browserview-configurator.js')
-  const preferences = require('./preferences.js')
+  const configurator = require('./browserview-preparer.js')
+  const preferences = require('../preferences.js')
   const path = require('path')
   const url = require('url')
 
@@ -36,14 +36,14 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
     try {
       mainWindowState = windowStateKeeper( { defaultWidth: 1000, defaultHeight: 750 } )
       bounds = {
-        title: "Pulse SMS", icon: path.join(__dirname, '../../build/icon.png'),
+        title: "Pulse SMS", icon: path.join(__dirname, '../build/icon.png'),
         show: !noGui, x: mainWindowState.x, y: mainWindowState.y,
         width: mainWindowState.width, height: mainWindowState.height,
         minWidth: 300, minHeight: 300
       }
     } catch (err) {
       bounds = {
-        title: "Pulse SMS", icon: path.join(__dirname, '../../build/icon.png'),
+        title: "Pulse SMS", icon: path.join(__dirname, '../build/icon.png'),
         show: !noGui, x: 0, y: 0,
         width: 1000, height: 750,
         minWidth: 300, minHeight: 300
@@ -87,7 +87,7 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
 
   var createReplyWindow = () => {
     let window = new BrowserWindow({
-      title: "Pulse SMS Popup", icon: path.join(__dirname, '../../build/icon.png'),
+      title: "Pulse SMS Popup", icon: path.join(__dirname, '../build/icon.png'),
       width: 410, height: 550,
       minWidth: 300, minHeight: 300,
       x: 0, y: 0

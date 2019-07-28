@@ -21,9 +21,9 @@
   const https = require('https')
   const storage = require('electron-json-storage')
   const url = require('url');
-  const preferences = require('./preferences.js')
-  const decrypt = require('./decrypt.js')
-  const notifier = require('./notifier.js')
+  const preferences = require('../preferences.js')
+  const decrypt = require('../decrypt.js')
+  const notifier = require('../notifier.js')
   const preparer = require('./websocket-preparer.js')
 
   let windowProvider = null
@@ -209,12 +209,12 @@
 
     let window = windowProvider.getWindow()
     if (unread.unread > 0) {
-      tray.setImage(path.resolve(__dirname, "../images/tray/windows-unread.ico"))
+      tray.setImage(path.resolve(__dirname, "assets/tray/windows-unread.ico"))
       if (typeof window !== "undefined" && window != null) {
-        window.setOverlayIcon(path.resolve(__dirname, "../images/windows-overlay.ico"), unread.unread + " Unread Conversations")
+        window.setOverlayIcon(path.resolve(__dirname, "assets/windows-overlay.ico"), unread.unread + " Unread Conversations")
       }
     } else {
-      tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
+      tray.setImage(path.resolve(__dirname, "assets/tray/windows.ico"))
       if (typeof window !== "undefined" && window != null) {
         window.setOverlayIcon(null, "No Unread Conversations")
       }

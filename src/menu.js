@@ -19,7 +19,7 @@
 
   const path = require('path')
   const preferences = require('./preferences.js')
-  const browserviewPreparer = require('./browserview-configurator.js')
+  const browserviewPreparer = require('./window/browserview-preparer.js')
 
   var notificationPreferencesMenu = {
       label: 'Notification Preferences',
@@ -145,7 +145,7 @@
           if (process.platform === "win32") {
             windowProvider.getWindow().setOverlayIcon(null, "No Unread Conversations")
             if (tray != null) {
-              tray.setImage(path.resolve(__dirname, "../images/tray/windows.ico"))
+              tray.setImage(path.resolve(__dirname, "assets/tray/windows.ico"))
             }
           }
         }
@@ -265,9 +265,9 @@
       iconName = "linux.png"
     }
 
-    var tray = new Tray(path.resolve(__dirname, '../images/tray/' + iconName))
+    var tray = new Tray(path.resolve(__dirname, 'assets/tray/' + iconName))
     if (process.platform === "darwin") {
-      tray.setPressedImage(path.resolve(__dirname, '../images/tray/macHighlight.png'))
+      tray.setPressedImage(path.resolve(__dirname, 'assets/tray/macHighlight.png'))
     }
 
     var contextMenu = Menu.buildFromTemplate([{

@@ -16,9 +16,9 @@
 
 (function() {
 
-  const spellCheck = require('./spellcheck-provider.js')
-  const websocketPreparer = require('./websocket-preparer.js')
-  const preferences = require('./preferences.js')
+  const spellCheck = require('../spellcheck/spellcheck-provider.js')
+  const websocketPreparer = require('../websocket/websocket-preparer.js')
+  const preferences = require('../preferences.js')
 
   var prepare = (window, browser) => {
     browser.setBounds( { x: 0, y: 0, width: window.getBounds().width, height: window.getBounds().height - getTitleBarSize(window) } )

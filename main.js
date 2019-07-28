@@ -120,19 +120,19 @@ function createWindow() {
 
 function initialize() {
   if (menu == null) {
-    menu = require('./resources/js/menu.js')
+    menu = require('./src/menu.js')
   }
 
   if (webSocket == null) {
-    webSocket = require('./resources/js/websocket.js')
+    webSocket = require('./src/websocket/websocket.js')
   }
 
   if (windowProvider == null) {
-    windowProvider = require('./resources/js/window-provider.js')
+    windowProvider = require('./src/window/window-provider.js')
   }
 
   if (preferences == null) {
-    preferences = require('./resources/js/preferences.js')
+    preferences = require('./src/preferences.js')
   }
 }
 
