@@ -14,13 +14,15 @@
  *  limitations under the License.
  */
 
-import SpellcheckProvider from "../spellcheck/spellcheck-provider";
+import DesktopPreferences from "./../preferences";
+import SpellcheckProvider from "./../spellcheck/spellcheck-provider";
+import WebsocketPreparer from "./../websocket/websocket-preparer";
 
 export default class BrowserviewPreparer {
 
   private spellCheck = new SpellcheckProvider();
-  private websocketPreparer = require("../websocket/websocket-preparer.js");
-  private preferences = require("../preferences.js");
+  private websocketPreparer = new WebsocketPreparer();
+  private preferences = new DesktopPreferences();
 
   public prepare = (window, browser) => {
     browser.setBounds({

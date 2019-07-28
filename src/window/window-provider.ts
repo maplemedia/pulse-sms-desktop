@@ -17,9 +17,8 @@
 import { app, BrowserView, BrowserWindow } from "electron";
 import * as windowStateKeeper from "electron-window-state";
 import * as path from "path";
-import * as url from "url";
 
-import * as preferences from "./../preferences.js";
+import DesktopPreferences from "./../preferences";
 import BrowserviewPreparer from "./browserview-preparer";
 
 // Add a command line arg to see if the user wants to hide the gui on first launch
@@ -28,6 +27,7 @@ let noGui = process.argv.indexOf("--no-gui") > -1;
 export default class WindowProvider {
 
   private browserviewPreparer = new BrowserviewPreparer();
+  private preferences = new DesktopPreferences();
 
   private mainWindow = null;
   private replyWindow = null;
@@ -72,7 +72,7 @@ export default class WindowProvider {
       noGui = false;
     }
 
-    if (app.getLocale().indexOf("en") >= 0 && preferences.useSpellcheck()) {
+    if (app.getLocale().indexOf("en") >= 0 && this.preferences.useSpellcheck()) {
       this.browserView = new BrowserView({
         webPreferences: {
           nodeIntegration: false,
@@ -94,7 +94,7 @@ export default class WindowProvider {
       event.preventDefault();
       this.getWindow().hide();
 
-      if (process.platform === "darwin" && preferences.minimizeToTray()) {
+      if (process.platform === "darwin" && this.preferences.minimizeToTray()) {
         app.dock.hide();
       }
     });
@@ -122,7 +122,7 @@ export default class WindowProvider {
     });
 
     let browserView;
-    if (app.getLocale().indexOf("en") >= 0 && preferences.useSpellcheck()) {
+    if (app.getLocale().indexOf("en") >= 0 && this.preferences.useSpellcheck()) {
       browserView = new BrowserView({
         webPreferences: {
           nodeIntegration: false,

@@ -17,69 +17,71 @@
 import { app, BrowserView, dialog, Menu, Tray } from "electron";
 import * as path from "path";
 
-import * as preferences from "./preferences.js";
+import DesktopPreferences from "./preferences";
 import BrowserviewPreparer from "./window/browserview-preparer";
 
 export default class PulseMenu {
 
   private browserviewPreparer = new BrowserviewPreparer();
+  private preferences = new DesktopPreferences();
+
   private notificationPreferencesMenu: any = {
     label: "Notification Preferences",
     submenu: [{
-        checked: preferences.showNotifications(),
+        checked: this.preferences.showNotifications(),
         click: () => {
-          preferences.toggleShowNotifications();
+          this.preferences.toggleShowNotifications();
         },
         label: "Show Notifications",
         type: "checkbox",
       }, {
-        checked: preferences.notificationSounds(),
+        checked: this.preferences.notificationSounds(),
         click: () => {
-          preferences.toggleNotificationSounds();
+          this.preferences.toggleNotificationSounds();
         },
         label: "Play Notification Sound",
         type: "checkbox",
       }, { type: "separator" }, {
-        checked: preferences.notificationSenderPreviews(),
+        checked: this.preferences.notificationSenderPreviews(),
         click: () => {
-          preferences.toggleNotificationSenderPreviews();
+          this.preferences.toggleNotificationSenderPreviews();
         },
         label: "Display Sender in Notification",
         type: "checkbox",
       }, {
-        checked: preferences.notificationMessagePreviews(),
+        checked: this.preferences.notificationMessagePreviews(),
         click: () => {
-          preferences.toggleNotificationMessagePreviews();
+          this.preferences.toggleNotificationMessagePreviews();
         },
         label: "Display Message Preview in Notification",
         type: "checkbox",
       }, { type: "separator" }, {
         label: "Snooze Desktop Notifications",
         submenu: [{
-            checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() === "30_mins",
+            checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "30_mins",
             click: () => {
-              preferences.snooze("30_mins");
+              this.preferences.snooze("30_mins");
             },
             label: "30 mins",
             type: "checkbox",
           }, {
-            checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() === "1_hour",
+            checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "1_hour",
             click: () => {
-              preferences.snooze("1_hour");
+              this.preferences.snooze("1_hour");
             },
             label: "1 hour",
             type: "checkbox",
           }, {
-            checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() === "3_hours",
+            checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "3_hours",
             click: () => {
-              preferences.snooze("3_hours");
+              this.preferences.snooze("3_hours");
             },
             label: "3 hours",
             type: "checkbox",
           }, {
-            checked: preferences.isSnoozeActive() && preferences.currentSnoozeSelection() === "12_hours",
+            checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "12_hours",
             click: () => {
-              preferences.snooze("12_hours");
+              this.preferences.snooze("12_hours");
             },
             label: "12 hours",
             type: "checkbox",
@@ -93,10 +95,10 @@ export default class PulseMenu {
     const template: any[] = [{
       label: "Preferences",
       submenu: [ this.notificationPreferencesMenu, { type: "separator" }, {
-        checked: preferences.minimizeToTray(),
+        checked: this.preferences.minimizeToTray(),
         click: () => {
-          const toTray = !preferences.minimizeToTray();
-          preferences.toggleMinimizeToTray();
+          const toTray = !this.preferences.minimizeToTray();
+          this.preferences.toggleMinimizeToTray();
 
           if (!toTray && tray != null) {
             tray.destroy();
@@ -177,10 +179,10 @@ export default class PulseMenu {
     }];
 
     template[0].submenu.push({
-      checked: preferences.badgeDockIcon(),
+      checked: this.preferences.badgeDockIcon(),
       click: () => {
-        const badge = !preferences.badgeDockIcon();
-        preferences.toggleBadgeDockIcon();
+        const badge = !this.preferences.badgeDockIcon();
+        this.preferences.toggleBadgeDockIcon();
 
         if (!badge) {
           if (process.platform !== "win32") {
@@ -205,10 +207,10 @@ export default class PulseMenu {
 
     if (app.getLocale().indexOf("en") > -1) {
       template[0].submenu.push({
-        checked: preferences.useSpellcheck(),
+        checked: this.preferences.useSpellcheck(),
         click() {
-          const useIt = !preferences.useSpellcheck();
-          preferences.toggleUseSpellcheck();
+          const useIt = !this.preferences.useSpellcheck();
+          this.preferences.toggleUseSpellcheck();
 
           const dialogOpts = {
             buttons: ["Restart", "Later"],
@@ -236,10 +238,10 @@ export default class PulseMenu {
 
     if (process.platform === "win32") {
       template[0].submenu.push({
-        checked: preferences.openAtLogin(),
+        checked: this.preferences.openAtLogin(),
         click() {
-          const autoOpen = !preferences.openAtLogin();
-          preferences.toggleOpenAtLogin();
+          const autoOpen = !this.preferences.openAtLogin();
+          this.preferences.toggleOpenAtLogin();
           app.setLoginItemSettings({ openAtLogin: autoOpen });
         },
         label: "Auto-Open at Login",
@@ -280,10 +282,10 @@ export default class PulseMenu {
       ];
     } else {
       template[0].submenu.push({
-        checked: preferences.autoHideMenuBar(),
+        checked: this.preferences.autoHideMenuBar(),
         click: () => {
-          const autoHide = !preferences.autoHideMenuBar();
-          preferences.toggleAutoHideMenuBar();
+          const autoHide = !this.preferences.autoHideMenuBar();
+          this.preferences.toggleAutoHideMenuBar();
 
           windowProvider.getWindow().setAutoHideMenuBar(autoHide);
           windowProvider.getWindow().setMenuBarVisibility(!autoHide);
@@ -300,12 +302,12 @@ export default class PulseMenu {
 
     // if they turn on auto hide, then this should be hidden.
     // if they turn off auto hide, we will show this menu bar immediately.
-    windowProvider.getWindow().setMenuBarVisibility(!preferences.autoHideMenuBar());
-    windowProvider.getWindow().setAutoHideMenuBar(preferences.autoHideMenuBar());
+    windowProvider.getWindow().setMenuBarVisibility(!this.preferences.autoHideMenuBar());
+    windowProvider.getWindow().setAutoHideMenuBar(this.preferences.autoHideMenuBar());
   }
 
   public buildTray = (windowProvider, webSocket) => {
-    if (!preferences.minimizeToTray()) {
+    if (!this.preferences.minimizeToTray()) {
       return;
     }
 

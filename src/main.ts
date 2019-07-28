@@ -18,6 +18,8 @@ import { app, crashReporter, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 
 import PulseMenu from "./menu";
+import DesktopPreferences from "./preferences";
+import PulseWebSocket from "./websocket/websocket";
 import WindowProvider from "./window/window-provider";
 
 let windowProvider = null;
@@ -126,7 +128,7 @@ function createWindow() {
 
 function initialize() {
   if (webSocket == null) {
-    webSocket = require("./websocket/websocket.js");
+    webSocket = new PulseWebSocket();
   }
 
   if (menu == null) {
@@ -138,7 +140,7 @@ function initialize() {
   }
 
   if (preferences == null) {
-    preferences = require("./preferences.js");
+    preferences = new DesktopPreferences();
   }
 }
 
