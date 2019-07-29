@@ -14,13 +14,13 @@
  *  limitations under the License.
  */
 
-import { app, dialog, Menu, MenuItem, shell } from "electron";
+import { app, BrowserView, BrowserWindow, dialog, Menu, MenuItem, shell } from "electron";
 import * as fs from "fs";
 
 export default class SpellcheckProvider {
 
-  public prepareMenu = (window, browser) => {
-    browser.webContents.addListener("context-menu", async (event, params) => {
+  public prepareMenu = (window: BrowserWindow, browser: BrowserView) => {
+    browser.webContents.addListener("context-menu", async (_: any, params: any) => {
       const menu = new Menu();
       const isTextInput = params.isEditable || (params.inputFieldType && params.inputFieldType !== "none");
       const hasSuggestion = isTextInput && params.misspelledWord && params.misspelledWord.length >= 1;
@@ -29,9 +29,9 @@ export default class SpellcheckProvider {
         const suggestions = await browser.webContents
           .executeJavaScript('window.spellCheck.getSuggestion("' + params.misspelledWord + '")');
 
-        suggestions.forEach((value) => {
+        suggestions.forEach((value: any): void => {
           const item = new MenuItem({
-            click: () => browser.webContents.replaceMisspelling(value),
+            click: (): void => browser.webContents.replaceMisspelling(value),
             label: value,
           });
 
@@ -44,18 +44,18 @@ export default class SpellcheckProvider {
 
         menu.append(new MenuItem({ type: "separator" }));
         this.appendGenericContextMenu(menu, params, isTextInput);
-        menu.popup(window);
+        menu.popup(window as any);
       } else {
         this.appendGenericContextMenu(menu, params, isTextInput);
 
         if (menu.items.length > 0) {
-          menu.popup(window);
+          menu.popup(window as any);
         }
       }
     });
   }
 
-  private appendGenericContextMenu = (menu, params, isTextInput) => {
+  private appendGenericContextMenu = (menu: any, params: any, isTextInput: boolean): void => {
     if (params.selectionText) {
       menu.append(new MenuItem({ role: "copy" }));
 
@@ -77,12 +77,12 @@ export default class SpellcheckProvider {
 
     if (params.mediaType === "image") {
       menu.append(new MenuItem({
-        click: () => {
+        click: (): void => {
           const options = { defaultPath: app.getPath("downloads") + "/image.jpeg" };
-          dialog.showSaveDialog(null, options, (path) => {
+          dialog.showSaveDialog(null, options, (path: string): void => {
             if (path) {
               const imageData = (params.linkURL || params.srcURL).replace(/^data:(image\/jpeg|undefined);base64,/, "");
-              fs.writeFile(path, imageData, "base64", (err) => {
+              fs.writeFile(path, imageData, "base64", (): void => {
                 // no-op
               });
             }

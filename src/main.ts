@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, crashReporter, dialog } from "electron";
+import { app, BrowserWindow, crashReporter, dialog, Tray } from "electron";
 import { autoUpdater } from "electron-updater";
 
 import PulseMenu from "./menu";
@@ -22,13 +22,13 @@ import DesktopPreferences from "./preferences";
 import PulseWebSocket from "./websocket/websocket";
 import WindowProvider from "./window/window-provider";
 
-let windowProvider = null;
-let menu = null;
-let webSocket = null;
-let preferences = null;
+let windowProvider: WindowProvider = null;
+let menu: PulseMenu = null;
+let webSocket: PulseWebSocket = null;
+let preferences: DesktopPreferences = null;
 
-let mainWindow = null;
-let tray = null;
+let mainWindow: BrowserWindow = null;
+let tray: Tray = null;
 
 const gotLock = app.requestSingleInstanceLock();
 
@@ -36,7 +36,7 @@ if (!gotLock) {
   app.exit(0);
 }
 
-app.on("second-instance", () => {
+app.on("second-instance", (): void => {
   if (windowProvider == null || windowProvider.getWindow() == null) {
     initialize();
   }
@@ -74,7 +74,7 @@ try {
   // no-op
 }
 
-autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
+autoUpdater.on("update-downloaded", (): void => {
   const dialogOpts = {
     buttons: ["Install", "Later"],
     detail: "Hit install, then re-open the app, to automatically apply the update.",
@@ -84,7 +84,7 @@ autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
   };
 
   try {
-    dialog.showMessageBox(dialogOpts, (response) => {
+    dialog.showMessageBox(dialogOpts, (response: number): void => {
       if (response === 0) {
         webSocket.closeWebSocket();
         autoUpdater.quitAndInstall();
@@ -97,11 +97,11 @@ autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
   }
 });
 
-autoUpdater.on("error", (message) => {
+autoUpdater.on("error", (): void => {
   // no-op
 });
 
-function createWindow() {
+function createWindow(): void {
   initialize();
 
   if (windowProvider.getWindow() === null) {
@@ -126,7 +126,7 @@ function createWindow() {
   }
 }
 
-function initialize() {
+function initialize(): void {
   if (webSocket == null) {
     webSocket = new PulseWebSocket();
   }
@@ -144,7 +144,7 @@ function initialize() {
   }
 }
 
-function openWebSocket() {
+function openWebSocket(): void {
   if (webSocket.isWebSocketRunning()) {
     return;
   }

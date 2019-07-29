@@ -32,15 +32,15 @@ export default class PulseWebSocket {
   private preparer = new WebsocketPreparer();
   private decrypt = require("../decrypt.js");
 
-  private windowProvider = null;
-  private tray = null;
-  private socket = null;
-  private isRunning = false;
-  private lastPing = new Date().getTime();
-  private lastOpenedConnection = new Date().getTime();
-  private currentTimeout = null;
+  private windowProvider: WindowProvider = null;
+  private tray: Tray = null;
+  private socket: any = null;
+  private isRunning: boolean = false;
+  private lastPing: number = new Date().getTime();
+  private lastOpenedConnection: number = new Date().getTime();
+  private currentTimeout: any = null;
 
-  public openWebSocket = (provider?: WindowProvider, trayMenu?: Tray) => {
+  public openWebSocket = (provider?: WindowProvider, trayMenu?: Tray): void => {
     if (provider) {
       this.setWindowProvider(provider);
     }
@@ -49,7 +49,7 @@ export default class PulseWebSocket {
       this.tray = trayMenu;
     }
 
-    storage.get("account_id", (error, id) => {
+    storage.get("account_id", (error: any, id: any): void => {
       if (error || id == null || id.length === 0) {
         this.scheduleRunCheck();
       } else {
@@ -58,7 +58,7 @@ export default class PulseWebSocket {
     });
   }
 
-  public closeWebSocket = () => {
+  public closeWebSocket = (): void => {
     try {
       this.socket.terminate();
     } catch (err) {
@@ -66,26 +66,25 @@ export default class PulseWebSocket {
     }
   }
 
-  public isWebSocketRunning = () => {
+  public isWebSocketRunning = (): boolean => {
     return this.isRunning;
   }
 
-  public setWindowProvider = (provider) => {
+  public setWindowProvider = (provider: WindowProvider): void => {
     this.windowProvider = provider;
   }
 
-  private open = (accountId) => {
+  private open = (accountId: number): void => {
     this.closeWebSocket();
 
     const wsUrl = "wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + accountId;
     this.socket = new WebSocket(wsUrl, { agent: this.preparer.getProxyAgent() });
 
-    this.socket.on("error", (err) =>  {
+    this.socket.on("error", (_: any): void =>  {
       // console.log("ws error: " + err);
     });
 
-    this.socket.on("open", () =>  {
-      // console.log("websocket: opened connection");
+    this.socket.on("open", (): void =>  {
       this.lastOpenedConnection = new Date().getTime();
       this.isRunning = true;
 
@@ -95,7 +94,7 @@ export default class PulseWebSocket {
       }));
     });
 
-    this.socket.on("close", () => {
+    this.socket.on("close", (): void => {
       // console.log("websocket: closed connection");
       if (new Date().getTime() - this.lastOpenedConnection < 2000) {
         // console.log("websocket: invalid account id request");
@@ -103,7 +102,7 @@ export default class PulseWebSocket {
       }
     });
 
-    this.socket.on("message", (event) => {
+    this.socket.on("message", (event: any): void => {
       const json = JSON.parse(event);
       if (typeof json.type === "undefined") {
         if (typeof json.message !== "undefined" && json.message.operation === "added_message") {
@@ -122,9 +121,8 @@ export default class PulseWebSocket {
     this.updateBadgeCount();
   }
 
-  private checkRunning = () => {
+  private checkRunning = (): void => {
     if (new Date().getTime() - this.lastPing > 1000 * 70) {
-      // console.log("restarting the connection");
       this.isRunning = false;
 
       if (this.windowProvider.getBrowserView()) {
@@ -137,7 +135,7 @@ export default class PulseWebSocket {
     this.scheduleRunCheck();
   }
 
-  private scheduleRunCheck = (time?: number) => {
+  private scheduleRunCheck = (time?: number): void => {
     if (this.currentTimeout != null) {
       clearTimeout(this.currentTimeout);
     }
@@ -149,7 +147,7 @@ export default class PulseWebSocket {
     this.currentTimeout = setTimeout(this.checkRunning, time);
   }
 
-  private newMessage = (message) => {
+  private newMessage = (message: any): void => {
     storage.getMany(["account_id", "hash", "salt"], (error, result) => {
       if (typeof result === "undefined" || result == null) {
         return;
@@ -184,7 +182,7 @@ export default class PulseWebSocket {
 
         const conversationUrl = "https://api.messenger.klinkerapps.com/api/v1/conversations/" +
           message.conversation_id + "?account_id=" + result.account_id;
-        this.getJSON(conversationUrl, (conversation) => {
+        this.getJSON(conversationUrl, (conversation: any) => {
           if (typeof conversation !== "undefined" && conversation != null) {
             try {
               this.provideNotification(message, conversation, aesKey);
@@ -197,7 +195,7 @@ export default class PulseWebSocket {
     });
   }
 
-  private updateBadgeCount = (timeout?: number) => {
+  private updateBadgeCount = (timeout?: number): void => {
     if (!this.preferences.badgeDockIcon()) {
       return;
     }
@@ -207,11 +205,11 @@ export default class PulseWebSocket {
     }
 
     setTimeout(() => {
-      storage.get("account_id", (error, id) => {
+      storage.get("account_id", (error: any, id: string) => {
         if (!error && id.length !== 0) {
           const urlToGet = "https://api.messenger.klinkerapps.com/api/v1/conversations/unread_count?account_id=" + id;
-          this.getJSON(urlToGet, (unread) => {
-            if (typeof unread !== "undefined" && unread != null) {
+          this.getJSON(urlToGet, (unread?: any | null): void => {
+            if (unread) {
               try {
                 if (process.platform === "win32" && this.tray != null) {
                   this.setWindowsIndicator(unread, this.tray);
@@ -228,12 +226,12 @@ export default class PulseWebSocket {
     }, timeout);
   }
 
-private setWindowsIndicator = (unread, tray) => {
+private setWindowsIndicator = (unread: any, tray: Tray): void => {
     const window = this.windowProvider.getWindow();
     if (unread.unread > 0) {
       tray.setImage(path.resolve(__dirname, "../assets/tray/windows-unread.ico"));
       if (typeof window !== "undefined" && window != null) {
-        window.setOverlayIcon(
+        (window as any).setOverlayIcon(
           path.resolve(__dirname, "../assets/windows-overlay.ico"),
           unread.unread + " Unread Conversations",
         );
@@ -246,14 +244,14 @@ private setWindowsIndicator = (unread, tray) => {
     }
   }
 
-private setMacLinuxIndicators = (unread, tray) => {
+private setMacLinuxIndicators = (unread: any, tray: Tray) => {
     app.setBadgeCount(unread.unread);
     if (process.platform === "darwin" && tray != null) {
       tray.setTitle(unread.unread === 0 ? "" : unread.unread + "");
     }
   }
 
-private provideNotification = (message, conversation, aesKey) => {
+private provideNotification = (message: any, conversation: any, aesKey: string) => {
     if (conversation == null) {
       return;
     }
@@ -287,27 +285,27 @@ private provideNotification = (message, conversation, aesKey) => {
     }
   }
 
-private getJSON = (urlToGet, successHandler) => {
+private getJSON = (urlToGet: string, successHandler: (param: any) => void): void => {
     const options: any = url.parse(urlToGet);
     options.agent = this.preparer.getProxyAgent();
-    const req = https.get(options, (response) => {
+    const req = https.get(options, (response: any): void => {
       let body = "";
-      response.on("data", (d) => {
+      response.on("data", (d: any): void => {
         body += d;
       });
-      response.on("end", () => {
+      response.on("end", (): void => {
         try {
           successHandler(JSON.parse(body));
         } catch (err) {
           // no-op
         }
       });
-      response.on("error", () => {
+      response.on("error", (): void => {
         // no-op
       });
     });
 
-    req.on("error", (error) => {
+    req.on("error", (error: any): void => {
       // no-op
     });
   }

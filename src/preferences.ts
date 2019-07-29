@@ -35,7 +35,7 @@ export default class DesktopPreferences {
   private static OPEN_AT_LOGIN = "open-at-login";
   private static MINIMIZE_TO_TRAY = "minimize-to-tray";
 
-  public isSnoozeActive = () => {
+  public isSnoozeActive = (): boolean => {
     const hasValue = settings.has(DesktopPreferences.SNOOZE_END_TIME)
       && settings.has(DesktopPreferences.SNOOZE_PREFERENCE)
       && settings.get(DesktopPreferences.SNOOZE_PREFERENCE) !== "none";
@@ -49,12 +49,12 @@ export default class DesktopPreferences {
     return currentTime < snoozeEndTime;
   }
 
-  public currentSnoozeSelection = () => {
+  public currentSnoozeSelection = (): string => {
     return settings.has(DesktopPreferences.SNOOZE_PREFERENCE) ?
       settings.get(DesktopPreferences.SNOOZE_PREFERENCE) : "none";
   }
 
-  public snooze = (identifier) => {
+  public snooze = (identifier: string): void => {
     if (this.currentSnoozeSelection() === identifier) {
       settings.set(DesktopPreferences.SNOOZE_PREFERENCE, "none");
       settings.set(DesktopPreferences.SNOOZE_END_TIME, "0");
@@ -74,88 +74,88 @@ export default class DesktopPreferences {
     }
   }
 
-  public autoHideMenuBar = () => (
+  public autoHideMenuBar = (): boolean => (
     settings.has(DesktopPreferences.AUTO_HIDE_MENU_BAR) &&
       settings.get(DesktopPreferences.AUTO_HIDE_MENU_BAR) === "true"
   )
 
-  public showNotifications = () => (
+  public showNotifications = (): boolean => (
     !settings.has(DesktopPreferences.SHOW_NOTIFICATIONS) ||
       settings.get(DesktopPreferences.SHOW_NOTIFICATIONS) === "true"
   )
 
-  public notificationSounds = () => (
+  public notificationSounds = (): boolean => (
     !settings.has(DesktopPreferences.NOTIFICATION_SOUNDS) ||
       settings.get(DesktopPreferences.NOTIFICATION_SOUNDS) === "true"
   )
 
-  public notificationSenderPreviews = () => (
+  public notificationSenderPreviews = (): boolean => (
     !settings.has(DesktopPreferences.NOTIFICATION_SENDER_PREVIEWS) ||
       settings.get(DesktopPreferences.NOTIFICATION_SENDER_PREVIEWS) === "true"
   )
 
-  public notificationMessagePreviews = () => (
+  public notificationMessagePreviews = (): boolean => (
     !settings.has(DesktopPreferences.NOTIFICATION_MESSAGE_PREVIEWS) ||
       settings.get(DesktopPreferences.NOTIFICATION_MESSAGE_PREVIEWS) === "true"
   )
 
-  public badgeDockIcon = () => (
+  public badgeDockIcon = (): boolean => (
     !settings.has(DesktopPreferences.BADGE_DOCK_ICON) ||
       settings.get(DesktopPreferences.BADGE_DOCK_ICON) === "true"
   )
 
-  public useSpellcheck = () => (
+  public useSpellcheck = (): boolean => (
     !settings.has(DesktopPreferences.USE_SPELLCHECK) ||
       settings.get(DesktopPreferences.USE_SPELLCHECK) === "true"
   )
 
-  public openAtLogin = () => (
+  public openAtLogin = (): boolean => (
     !settings.has(DesktopPreferences.OPEN_AT_LOGIN) ||
       settings.get(DesktopPreferences.OPEN_AT_LOGIN) === "true"
   )
 
-  public minimizeToTray = () => (
+  public minimizeToTray = (): boolean => (
     !settings.has(DesktopPreferences.MINIMIZE_TO_TRAY) ||
       settings.get(DesktopPreferences.MINIMIZE_TO_TRAY) === "true"
   )
 
-  public toggleAutoHideMenuBar = () => {
+  public toggleAutoHideMenuBar = (): void => {
     this.togglePreference(DesktopPreferences.AUTO_HIDE_MENU_BAR, this.autoHideMenuBar);
   }
 
-  public toggleShowNotifications = () => {
+  public toggleShowNotifications = (): void => {
     this.togglePreference(DesktopPreferences.SHOW_NOTIFICATIONS, this.showNotifications);
   }
 
-  public toggleNotificationSounds = () => {
+  public toggleNotificationSounds = (): void => {
     this.togglePreference(DesktopPreferences.NOTIFICATION_SOUNDS, this.notificationSounds);
   }
 
-  public toggleNotificationSenderPreviews = () => {
+  public toggleNotificationSenderPreviews = (): void => {
     this.togglePreference(DesktopPreferences.NOTIFICATION_SENDER_PREVIEWS, this.notificationSenderPreviews);
   }
 
-  public toggleNotificationMessagePreviews = () => {
+  public toggleNotificationMessagePreviews = (): void => {
     this.togglePreference(DesktopPreferences.NOTIFICATION_MESSAGE_PREVIEWS, this.notificationMessagePreviews);
   }
 
-  public toggleBadgeDockIcon = () => {
+  public toggleBadgeDockIcon = (): void => {
     this.togglePreference(DesktopPreferences.BADGE_DOCK_ICON, this.badgeDockIcon);
   }
 
-  public toggleUseSpellcheck = () => {
+  public toggleUseSpellcheck = (): void => {
     this.togglePreference(DesktopPreferences.USE_SPELLCHECK, this.useSpellcheck);
   }
 
-  public toggleOpenAtLogin = () => {
+  public toggleOpenAtLogin = (): void => {
     this.togglePreference(DesktopPreferences.OPEN_AT_LOGIN, this.openAtLogin);
   }
 
-  public toggleMinimizeToTray = () => {
+  public toggleMinimizeToTray = (): void => {
     this.togglePreference(DesktopPreferences.MINIMIZE_TO_TRAY, this.minimizeToTray);
   }
 
-  private togglePreference = (id, getter) => {
+  private togglePreference = (id: string, getter: () => boolean) => {
     settings.set(id, !getter() + "");
   }
 }

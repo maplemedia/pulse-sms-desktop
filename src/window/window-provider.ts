@@ -19,24 +19,24 @@ import * as windowStateKeeper from "electron-window-state";
 import * as path from "path";
 
 import DesktopPreferences from "./../preferences";
-import BrowserviewPreparer from "./browserview-preparer";
+import BrowserViewPreparer from "./browserview-preparer";
 
 // Add a command line arg to see if the user wants to hide the gui on first launch
 let noGui = process.argv.indexOf("--no-gui") > -1;
 
 export default class WindowProvider {
 
-  private browserviewPreparer = new BrowserviewPreparer();
+  private browserViewPreparer = new BrowserViewPreparer();
   private preferences = new DesktopPreferences();
 
-  private mainWindow = null;
-  private replyWindow = null;
-  private browserView = null;
+  private mainWindow: BrowserWindow = null;
+  private replyWindow: BrowserWindow = null;
+  private browserView: BrowserView = null;
 
-  public createMainWindow = () => {
-    let mainWindowState = null;
-    let mainWindow = null;
-    let bounds = null;
+  public createMainWindow = (): BrowserWindow => {
+    let mainWindow: BrowserWindow = null;
+    let mainWindowState: any = null;
+    let bounds: any = null;
 
     try {
       mainWindowState = windowStateKeeper( { defaultWidth: 1000, defaultHeight: 750 } );
@@ -88,9 +88,9 @@ export default class WindowProvider {
     }
 
     mainWindow.setBrowserView(this.browserView);
-    this.browserviewPreparer.prepare(mainWindow, this.browserView);
+    this.browserViewPreparer.prepare(mainWindow, this.browserView);
 
-    mainWindow.on("close", (event) => {
+    mainWindow.on("close", (event: Event): void => {
       event.preventDefault();
       this.getWindow().hide();
 
@@ -99,7 +99,7 @@ export default class WindowProvider {
       }
     });
 
-    mainWindow.on("closed", (event) => {
+    mainWindow.on("closed", (event: Event): void => {
       event.preventDefault();
     });
 
@@ -109,7 +109,7 @@ export default class WindowProvider {
     return mainWindow;
   }
 
-  public createReplyWindow = () => {
+  public createReplyWindow = (): void => {
     const window = new BrowserWindow({
       height: 550,
       icon: path.join(__dirname, "../build/icon.png"),
@@ -121,7 +121,7 @@ export default class WindowProvider {
       y: 0,
     });
 
-    let browserView;
+    let browserView: BrowserView;
     if (app.getLocale().indexOf("en") >= 0 && this.preferences.useSpellcheck()) {
       browserView = new BrowserView({
         webPreferences: {
@@ -138,32 +138,32 @@ export default class WindowProvider {
     }
 
     window.setBrowserView(browserView);
-    this.browserviewPreparer.prepare(window, browserView);
+    this.browserViewPreparer.prepare(window, browserView);
 
-    window.on("close", (event) => {
+    window.on("close", (event: Event): void => {
       this.setReplyWindow(null);
     });
 
     this.setReplyWindow(window);
   }
 
-  public setWindow = (w) => {
-    this.mainWindow = w;
+  public setWindow = (window: BrowserWindow): void => {
+    this.mainWindow = window;
   }
 
-  public getWindow = () => {
+  public getWindow = (): BrowserWindow => {
     return this.mainWindow;
   }
 
-  public getBrowserView = () => {
+  public getBrowserView = (): BrowserView => {
     return this.browserView;
   }
 
-  public setReplyWindow = (w) => {
-    this.replyWindow = w;
+  public setReplyWindow = (window: BrowserWindow): void => {
+    this.replyWindow = window;
   }
 
-  public getReplyWindow = () => {
+  public getReplyWindow = (): BrowserWindow => {
     return this.replyWindow;
   }
 

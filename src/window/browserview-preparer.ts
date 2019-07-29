@@ -14,17 +14,18 @@
  *  limitations under the License.
  */
 
+import { BrowserView, BrowserWindow } from "electron";
 import DesktopPreferences from "./../preferences";
 import SpellcheckProvider from "./../spellcheck/spellcheck-provider";
 import WebsocketPreparer from "./../websocket/websocket-preparer";
 
-export default class BrowserviewPreparer {
+export default class BrowserViewPreparer {
 
   private spellCheck = new SpellcheckProvider();
   private websocketPreparer = new WebsocketPreparer();
   private preferences = new DesktopPreferences();
 
-  public prepare = (window, browser) => {
+  public prepare = (window: BrowserWindow, browser: BrowserView) => {
     browser.setBounds({
       height: window.getBounds().height - this.getTitleBarSize(window),
       width: window.getBounds().width,
@@ -34,17 +35,17 @@ export default class BrowserviewPreparer {
     browser.setAutoResize( { width: true, height: true } );
     browser.webContents.loadURL("https://pulsesms.app");
 
-    browser.webContents.on("dom-ready", (event) => {
+    browser.webContents.on("dom-ready", (event: Event): void => {
       this.websocketPreparer.prepare(browser);
     });
 
-    browser.webContents.on("did-fail-load", (event) => {
+    browser.webContents.on("did-fail-load", (event: Event): void => {
       setTimeout(() => {
         browser.webContents.loadURL("https://pulsesms.app");
       }, 2000);
     });
 
-    browser.webContents.on("new-window", (event, url) => {
+    browser.webContents.on("new-window", (event: Event, url: string): void => {
       try {
         require("electron").shell.openExternal(url);
         event.preventDefault();
@@ -56,7 +57,7 @@ export default class BrowserviewPreparer {
     this.spellCheck.prepareMenu(window, browser);
   }
 
-  private getTitleBarSize = (window) => {
+  private getTitleBarSize = (window: BrowserWindow): number => {
     if (process.platform === "darwin") {
       return 20;
     } else if (process.platform === "win32") {
@@ -65,4 +66,5 @@ export default class BrowserviewPreparer {
       return 0;
     }
   }
+
 }

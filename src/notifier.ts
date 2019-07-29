@@ -21,6 +21,7 @@ import * as path from "path";
 import * as encrypt from "./decrypt.js";
 import DesktopPreferences from "./preferences";
 import WebsocketPreparer from "./websocket/websocket-preparer";
+import WindowProvider from "./window/window-provider.js";
 
 export default class Notifier {
 
@@ -28,10 +29,12 @@ export default class Notifier {
   private websocketPreparer = new WebsocketPreparer();
 
   private lastNotificationTime = new Date().getTime();
-  private currentNotification = null;
-  private windowProvider = null;
+  private currentNotification: Notification = null;
+  private windowProvider: WindowProvider = null;
 
-  public notify = (title, snippet, conversationId, isPrivate, provider) => {
+  public notify = (
+    title: string, snippet: string, conversationId: number, isPrivate: boolean, provider: WindowProvider,
+  ): void => {
     this.windowProvider = provider;
 
     if (!this.shouldProvideNotification() || title == null ||
@@ -50,7 +53,9 @@ export default class Notifier {
     this.genericNotification(title, snippet, conversationId, isPrivate);
   }
 
-  private genericNotification(title, snippet, conversationId, isPrivate) {
+  private genericNotification = (
+    title: string, snippet: string, conversationId: number, isPrivate: boolean,
+  ): void => {
     const options = {
       body: snippet,
       hasReply: !isPrivate,
@@ -69,13 +74,13 @@ export default class Notifier {
 
     this.currentNotification = new Notification(options);
 
-    this.currentNotification.on("reply", (event, reply) => {
+    this.currentNotification.on("reply", (_: any, reply: string): void => {
       this.sendMessage(reply, conversationId);
       this.dismissNotification(conversationId);
       this.markAsRead(conversationId);
     });
 
-    this.currentNotification.on("click", (event) => {
+    this.currentNotification.on("click", (): void => {
       let link = "https://pulsesms.app/thread/" + conversationId;
 
       if (isPrivate) {
@@ -85,7 +90,7 @@ export default class Notifier {
       if (this.windowProvider.getWindow() !== null) {
         this.windowProvider.getBrowserView().webContents
           .executeJavaScript(`document.getElementById("${conversationId}").click().length`, true)
-          .then((length) => {
+          .then((length: number): void => {
             if (length === 0) {
               this.windowProvider.getBrowserView().webContents.loadURL(link);
             }
@@ -114,14 +119,14 @@ export default class Notifier {
     }
   }
 
-  private createWindow = (link, conversationId) => {
+  private createWindow = (link: string, conversationId: number): void => {
     this.windowProvider.createMainWindow();
-    setTimeout(() => {
+    setTimeout((): void => {
       this.windowProvider.getBrowserView().webContents.loadURL(link);
     }, 1000);
   }
 
-  private createReplyWindow = (link) => {
+  private createReplyWindow = (link: string): void => {
     if (this.windowProvider.getReplyWindow() !== null) {
       this.windowProvider.getReplyWindow().webContents
         .executeJavaScript(`document.getElementById("messenger").loadURL("${link}")`);
@@ -129,15 +134,15 @@ export default class Notifier {
       this.windowProvider.getReplyWindow().focus();
     } else {
       this.windowProvider.createReplyWindow();
-      setTimeout(() => {
+      setTimeout((): void => {
         this.windowProvider.getReplyWindow().webContents
           .executeJavaScript(`document.getElementById("messenger").loadURL("${link}")`);
       }, 500);
     }
   }
 
-  private sendMessage = (text, conversationId) => {
-    storage.getMany(["account_id", "hash", "salt"], (error, result) => {
+  private sendMessage = (text: string, conversationId: number): void => {
+    storage.getMany(["account_id", "hash", "salt"], (_: any, result: any): void => {
       let aesKey = null;
 
       try {
@@ -172,7 +177,7 @@ export default class Notifier {
 
       const req = https.request(options);
 
-      req.on("error", (e) => {
+      req.on("error", (e: any): void => {
         // console.log(`problem with request: ${e.message}`);
       });
 
@@ -181,8 +186,8 @@ export default class Notifier {
     });
   }
 
-private dismissNotification = (conversationId) => {
-    storage.getMany(["account_id"], (error, result) => {
+  private dismissNotification = (conversationId: number): void => {
+    storage.getMany(["account_id"], (_: any, result: any): void => {
       const data = JSON.stringify({
         account_id: result.account_id,
         id: conversationId,
@@ -201,7 +206,7 @@ private dismissNotification = (conversationId) => {
 
       const req = https.request(options);
 
-      req.on("error", (e) => {
+      req.on("error", (e: any): void => {
         // console.log(`problem with request: ${e.message}`);
       });
 
@@ -210,8 +215,8 @@ private dismissNotification = (conversationId) => {
     });
   }
 
-private markAsRead = (conversationId) => {
-    storage.getMany(["account_id"], (error, result) => {
+  private markAsRead = (conversationId: number): void => {
+    storage.getMany(["account_id"], (_: any, result: any) => {
       const data = JSON.stringify({
         account_id: result.account_id,
       });
@@ -229,7 +234,7 @@ private markAsRead = (conversationId) => {
 
       const req = https.request(options);
 
-      req.on("error", (e) => {
+      req.on("error", (e: any): void => {
         // console.log(`problem with request: ${e.message}`);
       });
 
@@ -238,11 +243,7 @@ private markAsRead = (conversationId) => {
     });
   }
 
-private getRandomInt = (min, max): number => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  private getRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  private generateId = () => this.getRandomInt(1, 922337203685477);
 
-private generateId = (): number => {
-    return this.getRandomInt(1, 922337203685477);
-  }
 }

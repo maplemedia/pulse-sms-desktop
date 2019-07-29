@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+import { BrowserView } from "electron";
 import * as storage from "electron-json-storage";
 import * as HttpsProxyAgent from "https-proxy-agent";
 
@@ -22,27 +23,30 @@ export default class WebsocketPreparer {
   private debug = false;
   private proxyAgent = null;
 
-  public prepare = (browser) => {
-    browser.webContents.executeJavaScript('localStorage.getItem("account_id")', true).then((id) => {
-      id = id.replace(/\"/g, "");
-      storage.set("account_id", id);
-      this.log("saved account id: " + id);
-    });
+  public prepare = (browser: BrowserView) => {
+    browser.webContents.executeJavaScript('localStorage.getItem("account_id")', true)
+      .then((id: string): void => {
+        id = id.replace(/\"/g, "");
+        storage.set("account_id", id);
+        this.log("saved account id: " + id);
+      });
 
-    browser.webContents.executeJavaScript('localStorage.getItem("hash")', true).then((hash) => {
-      hash = hash.replace(/\"/g, "");
-      storage.set("hash", hash);
-      this.log("saved hash: " + hash);
-    });
+    browser.webContents.executeJavaScript('localStorage.getItem("hash")', true)
+      .then((hash: string): void => {
+        hash = hash.replace(/\"/g, "");
+        storage.set("hash", hash);
+        this.log("saved hash: " + hash);
+      });
 
-    browser.webContents.executeJavaScript('localStorage.getItem("salt")', true).then((salt) => {
-      salt = salt.replace(/\"/g, "");
-      storage.set("salt", salt);
-      this.log("saved salt: " + salt);
-    });
+    browser.webContents.executeJavaScript('localStorage.getItem("salt")', true)
+      .then((salt: string): void => {
+        salt = salt.replace(/\"/g, "");
+        storage.set("salt", salt);
+        this.log("saved salt: " + salt);
+      });
   }
 
-  public getProxyAgent = () => {
+  public getProxyAgent = (): any => {
     // use the PULSE_PROXY or HTTPS_PROXY environment variable to determine if we should use a proxy
     const envProxy = process.env.PULSE_PROXY || process.env.HTTPS_PROXY;
     if (!this.proxyAgent && envProxy) {
@@ -53,7 +57,7 @@ export default class WebsocketPreparer {
     return this.proxyAgent;
   }
 
-  private log = (message) => {
+  private log = (message: string): void => {
     if (this.debug) {
       // console.log(message);
     }

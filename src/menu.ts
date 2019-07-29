@@ -14,43 +14,45 @@
  *  limitations under the License.
  */
 
-import { app, BrowserView, dialog, Menu, Tray } from "electron";
+import { app, dialog, Menu, Tray } from "electron";
 import * as path from "path";
 
 import DesktopPreferences from "./preferences";
-import BrowserviewPreparer from "./window/browserview-preparer";
+import PulseWebSocket from "./websocket/websocket";
+import BrowserViewPreparer from "./window/browserview-preparer";
+import WindowProvider from "./window/window-provider";
 
 export default class PulseMenu {
 
-  private browserviewPreparer = new BrowserviewPreparer();
+  private browserviewPreparer = new BrowserViewPreparer();
   private preferences = new DesktopPreferences();
 
   private notificationPreferencesMenu: any = {
     label: "Notification Preferences",
     submenu: [{
         checked: this.preferences.showNotifications(),
-        click: () => {
+        click: (): void => {
           this.preferences.toggleShowNotifications();
         },
         label: "Show Notifications",
         type: "checkbox",
       }, {
         checked: this.preferences.notificationSounds(),
-        click: () => {
+        click: (): void => {
           this.preferences.toggleNotificationSounds();
         },
         label: "Play Notification Sound",
         type: "checkbox",
       }, { type: "separator" }, {
         checked: this.preferences.notificationSenderPreviews(),
-        click: () => {
+        click: (): void => {
           this.preferences.toggleNotificationSenderPreviews();
         },
         label: "Display Sender in Notification",
         type: "checkbox",
       }, {
         checked: this.preferences.notificationMessagePreviews(),
-        click: () => {
+        click: (): void => {
           this.preferences.toggleNotificationMessagePreviews();
         },
         label: "Display Message Preview in Notification",
@@ -59,28 +61,28 @@ export default class PulseMenu {
         label: "Snooze Desktop Notifications",
         submenu: [{
             checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "30_mins",
-            click: () => {
+            click: (): void => {
               this.preferences.snooze("30_mins");
             },
             label: "30 mins",
             type: "checkbox",
           }, {
             checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "1_hour",
-            click: () => {
+            click: (): void => {
               this.preferences.snooze("1_hour");
             },
             label: "1 hour",
             type: "checkbox",
           }, {
             checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "3_hours",
-            click: () => {
+            click: (): void => {
               this.preferences.snooze("3_hours");
             },
             label: "3 hours",
             type: "checkbox",
           }, {
             checked: this.preferences.isSnoozeActive() && this.preferences.currentSnoozeSelection() === "12_hours",
-            click: () => {
+            click: (): void => {
               this.preferences.snooze("12_hours");
             },
             label: "12 hours",
@@ -91,12 +93,12 @@ export default class PulseMenu {
     ],
   };
 
-  public buildMenu = (windowProvider, tray, webSocket) => {
+  public buildMenu = (windowProvider: WindowProvider, tray: Tray, webSocket: PulseWebSocket): void => {
     const template: any[] = [{
       label: "Preferences",
       submenu: [ this.notificationPreferencesMenu, { type: "separator" }, {
         checked: this.preferences.minimizeToTray(),
-        click: () => {
+        click: (): void => {
           const toTray = !this.preferences.minimizeToTray();
           this.preferences.toggleMinimizeToTray();
 
@@ -126,13 +128,13 @@ export default class PulseMenu {
       label: "View",
       submenu: [{
         accelerator: "CmdOrCtrl+R",
-        click: (item, focusedWindow) => {
+        click: (): void => {
           windowProvider.getBrowserView().webContents.loadURL("https://pulsesms.app");
         },
         label: "Reload",
       }, {
         accelerator: "CmdOrCtrl+I",
-        click: (item, focusedWindow) => {
+        click: (): void => {
           windowProvider.getBrowserView().webContents.toggleDevTools();
         },
         label: "Toggle Developer Tools",
@@ -153,22 +155,22 @@ export default class PulseMenu {
     }, {
       role: "help",
       submenu: [ {
-          click: () => {
+          click: (): void => {
             require("electron").shell.openExternal("https://github.com/klinker-apps/messenger-desktop/releases");
           },
           label: require("electron").app.getVersion(),
         }, {
-          click: () => {
+          click: (): void => {
             require("electron").shell.openExternal("https://messenger.klinkerapps.com/help");
           },
           label: "Get Help",
         }, {
-          click: () => {
+          click: (): void => {
             require("electron").shell.openExternal("https://messenger.klinkerapps.com/overview");
           },
           label: "Platform Support",
         }, {
-          click: () => {
+          click: (): void => {
             // tslint:disable-next-line:max-line-length
             require("electron").shell.openExternal("https://play.google.com/store/apps/details?id=xyz.klinker.messenger");
           },
@@ -180,7 +182,7 @@ export default class PulseMenu {
 
     template[0].submenu.push({
       checked: this.preferences.badgeDockIcon(),
-      click: () => {
+      click: (): void => {
         const badge = !this.preferences.badgeDockIcon();
         this.preferences.toggleBadgeDockIcon();
 
@@ -208,8 +210,7 @@ export default class PulseMenu {
     if (app.getLocale().indexOf("en") > -1) {
       template[0].submenu.push({
         checked: this.preferences.useSpellcheck(),
-        click() {
-          const useIt = !this.preferences.useSpellcheck();
+        click: (): void => {
           this.preferences.toggleUseSpellcheck();
 
           const dialogOpts = {
@@ -239,7 +240,7 @@ export default class PulseMenu {
     if (process.platform === "win32") {
       template[0].submenu.push({
         checked: this.preferences.openAtLogin(),
-        click() {
+        click: (): void => {
           const autoOpen = !this.preferences.openAtLogin();
           this.preferences.toggleOpenAtLogin();
           app.setLoginItemSettings({ openAtLogin: autoOpen });
@@ -283,7 +284,7 @@ export default class PulseMenu {
     } else {
       template[0].submenu.push({
         checked: this.preferences.autoHideMenuBar(),
-        click: () => {
+        click: (): void => {
           const autoHide = !this.preferences.autoHideMenuBar();
           this.preferences.toggleAutoHideMenuBar();
 
@@ -306,7 +307,7 @@ export default class PulseMenu {
     windowProvider.getWindow().setAutoHideMenuBar(this.preferences.autoHideMenuBar());
   }
 
-  public buildTray = (windowProvider, webSocket) => {
+  public buildTray = (windowProvider: WindowProvider, webSocket: PulseWebSocket) => {
     if (!this.preferences.minimizeToTray()) {
       return;
     }
@@ -326,18 +327,18 @@ export default class PulseMenu {
     }
 
     const contextMenu = Menu.buildFromTemplate([{
-      click: () => {
+      click: (): void => {
         this.showWindow(windowProvider);
       },
       label: "Show Pulse",
     }, {
-      click: () => {
-        this.showPoupWindow(windowProvider);
+      click: (): void => {
+        this.showPopupWindow(windowProvider);
       },
       label: "Show Popup Window",
     }, this.notificationPreferencesMenu, {
       accelerator: "Command+Q",
-      click: () => {
+      click: (): void => {
         webSocket.closeWebSocket();
         app.exit(0);
       },
@@ -346,14 +347,14 @@ export default class PulseMenu {
     tray.setToolTip("Pulse SMS");
     tray.setContextMenu(contextMenu);
 
-    tray.on("click", () => {
+    tray.on("click", (): void => {
       this.showWindow(windowProvider);
     });
 
     return tray;
   }
 
-  private showWindow = (windowProvider) => {
+  private showWindow = (windowProvider: WindowProvider): void => {
     if (windowProvider.getWindow() != null) {
       windowProvider.getWindow().show();
       if (process.platform === "darwin") {
@@ -364,7 +365,7 @@ export default class PulseMenu {
     }
   }
 
-  private showPoupWindow = (windowProvider) => {
+  private showPopupWindow = (windowProvider: WindowProvider): void => {
     if (windowProvider.getReplyWindow() !== null) {
       windowProvider.getReplyWindow().show();
       windowProvider.getReplyWindow().focus();
