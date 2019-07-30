@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, BrowserView, BrowserWindow, dialog, Menu, MenuItem, shell } from "electron";
+import { app, BrowserView, BrowserWindow, dialog, Menu, MenuItem, SaveDialogReturnValue, shell } from "electron";
 import * as fs from "fs";
 
 export default class SpellcheckProvider {
@@ -79,14 +79,16 @@ export default class SpellcheckProvider {
       menu.append(new MenuItem({
         click: (): void => {
           const options = { defaultPath: app.getPath("downloads") + "/image.jpeg" };
-          dialog.showSaveDialog(null, options, (path: string): void => {
-            if (path) {
-              const imageData = (params.linkURL || params.srcURL).replace(/^data:(image\/jpeg|undefined);base64,/, "");
-              fs.writeFile(path, imageData, "base64", (): void => {
-                // no-op
-              });
-            }
-          });
+          dialog.showSaveDialog(null, options)
+            .then((value: SaveDialogReturnValue): void => {
+              if (!value.canceled && value.filePath) {
+                const imageData = (params.linkURL || params.srcURL)
+                  .replace(/^data:(image\/jpeg|undefined);base64,/, "");
+                fs.writeFile(value.filePath, imageData, "base64", (): void => {
+                  // no-op
+                });
+              }
+            });
         },
         label: "Save Image As...",
       }));

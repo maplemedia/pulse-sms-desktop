@@ -32,7 +32,7 @@ export default class BrowserViewPreparer {
       x: 0,
       y: 0,
     });
-    browser.setAutoResize( { width: true, height: true } );
+    browser.setAutoResize( { width: true, height: true, horizontal: false, vertical: false } );
     browser.webContents.loadURL("https://pulsesms.app");
 
     browser.webContents.on("dom-ready", (event: Event): void => {

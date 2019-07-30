@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, dialog, Menu, Tray } from "electron";
+import { app, dialog, Menu, MessageBoxReturnValue, Tray } from "electron";
 import * as path from "path";
 
 import DesktopPreferences from "./preferences";
@@ -222,12 +222,13 @@ export default class PulseMenu {
           };
 
           try {
-            dialog.showMessageBox(dialogOpts, (response) => {
-              if (response === 0) {
-                webSocket.closeWebSocket();
-                app.exit(0);
-              }
-            });
+            dialog.showMessageBox(null, dialogOpts)
+              .then((value: MessageBoxReturnValue) => {
+                if (value.response === 0) {
+                  webSocket.closeWebSocket();
+                  app.exit(0);
+                }
+              });
           } catch (err) {
             // no-op
           }

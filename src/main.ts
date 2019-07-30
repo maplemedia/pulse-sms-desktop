@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, BrowserWindow, crashReporter, dialog, Tray } from "electron";
+import { app, BrowserWindow, crashReporter, dialog, MessageBoxReturnValue, Tray } from "electron";
 import { autoUpdater } from "electron-updater";
 
 import PulseMenu from "./menu";
@@ -84,14 +84,15 @@ autoUpdater.on("update-downloaded", (): void => {
   };
 
   try {
-    dialog.showMessageBox(dialogOpts, (response: number): void => {
-      if (response === 0) {
-        webSocket.closeWebSocket();
-        autoUpdater.quitAndInstall();
+    dialog.showMessageBox(null, dialogOpts)
+      .then((value: MessageBoxReturnValue) => {
+        if (value.response === 0) {
+          webSocket.closeWebSocket();
+          autoUpdater.quitAndInstall();
 
-        app.exit(0);
-      }
-    });
+          app.exit(0);
+        }
+      });
   } catch (err) {
     // no-op
   }
