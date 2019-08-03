@@ -40,13 +40,13 @@ To package the apps for each platform:
 $ yarn
 
 // MacOS (dmg)
-$ ./node_modules/.bin/electron-builder build --mac
+$ yarn run build-mac
 
 // Windows (installer with 32 and 64 bit support)
-$ ./node_modules/.bin/electron-builder build --windows nsis --x64 --ia32
+$ yarn run build-windows
 
 // Linux (deb and AppImage)
-$ ./node_modules/.bin/electron-builder build --linux deb AppImage
+$ yarn run build-linux
 ```
 
 ## Contributing
