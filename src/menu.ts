@@ -244,7 +244,14 @@ export default class PulseMenu {
         click: (): void => {
           const autoOpen = !this.preferences.openAtLogin();
           this.preferences.toggleOpenAtLogin();
-          app.setLoginItemSettings({ openAtLogin: autoOpen });
+          if (autoOpen) {
+            app.setLoginItemSettings({
+              args: [ "--no-gui" ],
+              openAtLogin: autoOpen,
+            });
+          } else {
+            app.setLoginItemSettings({ openAtLogin: false });
+          }
         },
         label: "Auto-Open at Login",
         type: "checkbox",

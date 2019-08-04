@@ -122,8 +122,12 @@ function createWindow(): void {
   }
 
   autoUpdater.checkForUpdates();
+
   if (process.platform === "win32") {
-    app.setLoginItemSettings({ openAtLogin: preferences.openAtLogin() });
+    app.setLoginItemSettings({
+      args: [ "--no-gui" ],
+      openAtLogin: preferences.openAtLogin(),
+    });
   }
 }
 
