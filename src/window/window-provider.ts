@@ -41,7 +41,6 @@ export default class WindowProvider {
     try {
       mainWindowState = windowStateKeeper( { defaultWidth: 1000, defaultHeight: 750 } );
       bounds = {
-        autoHideMenuBar: this.preferences.autoHideMenuBar(),
         height: mainWindowState.height,
         icon: path.join(__dirname, "../build/icon.png"),
         minHeight: 300,
@@ -54,7 +53,6 @@ export default class WindowProvider {
       };
     } catch (err) {
       bounds = {
-        autoHideMenuBar: this.preferences.autoHideMenuBar(),
         height: 750,
         icon: path.join(__dirname, "../build/icon.png"),
         minHeight: 300,
