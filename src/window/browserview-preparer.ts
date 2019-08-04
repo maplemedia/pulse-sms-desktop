@@ -73,7 +73,7 @@ export default class BrowserViewPreparer {
     if (process.platform === "darwin") {
       return 20;
     } else if (process.platform === "win32") {
-      return this.preferences.autoHideMenuBar() && window.isMenuBarVisible() ? 40 : 60;
+      return this.preferences.autoHideMenuBar() && !window.isMenuBarVisible() ? 40 : 60;
     } else {
       return this.preferences.autoHideMenuBar() && window.isMenuBarVisible() ? 20 : 0;
     }
