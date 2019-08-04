@@ -24,6 +24,7 @@ export default class DesktopPreferences {
 
   // Boolean Preference: Default to FALSE
   private static HIDE_MENU_BAR = "hide-menu-bar";
+  private static SEEN_MENU_BAR_WARNING = "seen-menu-bar-warning";
 
   // Boolean Preference: Default to TRUE
   private static SHOW_NOTIFICATIONS = "show-notifications";
@@ -79,6 +80,11 @@ export default class DesktopPreferences {
       settings.get(DesktopPreferences.HIDE_MENU_BAR) === "true"
   )
 
+  public seenMenuBarWarning = (): boolean => (
+    settings.has(DesktopPreferences.SEEN_MENU_BAR_WARNING) &&
+      settings.get(DesktopPreferences.SEEN_MENU_BAR_WARNING) === "true"
+  )
+
   public showNotifications = (): boolean => (
     !settings.has(DesktopPreferences.SHOW_NOTIFICATIONS) ||
       settings.get(DesktopPreferences.SHOW_NOTIFICATIONS) === "true"
@@ -121,6 +127,10 @@ export default class DesktopPreferences {
 
   public toggleHideMenuBar = (): void => {
     this.togglePreference(DesktopPreferences.HIDE_MENU_BAR, this.hideMenuBar);
+  }
+
+  public toggleSeenMenuBarWarning = (): void => {
+    this.togglePreference(DesktopPreferences.SEEN_MENU_BAR_WARNING, this.seenMenuBarWarning);
   }
 
   public toggleShowNotifications = (): void => {

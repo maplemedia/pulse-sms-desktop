@@ -221,17 +221,15 @@ export default class PulseMenu {
             type: "info",
           };
 
-          try {
-            dialog.showMessageBox(null, dialogOpts)
-              .then((value: MessageBoxReturnValue) => {
-                if (value.response === 0) {
-                  webSocket.closeWebSocket();
-                  app.exit(0);
-                }
-              });
-          } catch (err) {
-            // no-op
-          }
+          dialog.showMessageBox(null, dialogOpts)
+            .then((value: MessageBoxReturnValue) => {
+              if (value.response === 0) {
+                webSocket.closeWebSocket();
+                app.exit(0);
+              }
+            }).catch(() => {
+              // no-op
+            });
         },
         label: "Use Spellcheck",
         type: "checkbox",
@@ -303,6 +301,17 @@ export default class PulseMenu {
 
           this.preferences.toggleHideMenuBar();
           this.browserviewPreparer.setBounds(win, windowProvider.getBrowserView());
+
+          if (menuVisible && !this.preferences.seenMenuBarWarning()) {
+            const dialogOpts = {
+              buttons: ["OK"],
+              message: "Tapping Alt+M will allow you to toggle whether or not the menu bar is displayed.",
+              title: "Showing the Menu Bar",
+              type: "info",
+            };
+
+            dialog.showMessageBox(null, dialogOpts);
+          }
         },
         label: "Toggle Menu Bar Visibility",
       });
