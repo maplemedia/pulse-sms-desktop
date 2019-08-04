@@ -311,6 +311,7 @@ export default class PulseMenu {
             };
 
             dialog.showMessageBox(null, dialogOpts);
+            this.preferences.toggleSeenMenuBarWarning();
           }
         },
         label: "Toggle Menu Bar Visibility",
