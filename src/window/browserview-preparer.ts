@@ -57,25 +57,17 @@ export default class BrowserViewPreparer {
       height: window.getBounds().height - this.getTitleBarSize(window),
       width: window.getBounds().width,
       x: 0,
-      y: this.getYOffset(window),
+      y: 0,
     });
-  }
-
-  private getYOffset = (window: BrowserWindow): number => {
-    if (process.platform === "darwin" || !this.preferences.autoHideMenuBar()) {
-      return 0;
-    }
-
-    return window.isMenuBarVisible() ? 20 : 0;
   }
 
   private getTitleBarSize = (window: BrowserWindow): number => {
     if (process.platform === "darwin") {
       return 20;
     } else if (process.platform === "win32") {
-      return this.preferences.autoHideMenuBar() && !window.isMenuBarVisible() ? 40 : 60;
+      return !window.isMenuBarVisible() ? 40 : 60;
     } else {
-      return this.preferences.autoHideMenuBar() && window.isMenuBarVisible() ? 20 : 0;
+      return window.isMenuBarVisible() ? 20 : 0;
     }
   }
 

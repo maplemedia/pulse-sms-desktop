@@ -290,47 +290,33 @@ export default class PulseMenu {
         { label: "Bring All to Front", role: "front" },
       ];
     } else {
-      template[0].submenu.push({
-        checked: this.preferences.autoHideMenuBar(),
+      // Windows menu
+      template[3].submenu.push({ type: "separator" });
+      template[3].submenu.push({
+        accelerator: "Alt+M",
         click: (): void => {
-          const autoHide = !this.preferences.autoHideMenuBar();
-          this.preferences.toggleAutoHideMenuBar();
+          const win = windowProvider.getWindow();
+          const menuVisible = win.isMenuBarVisible();
 
-          windowProvider.getWindow().setAutoHideMenuBar(autoHide);
-          windowProvider.getWindow().setMenuBarVisibility(!autoHide);
+          win.setAutoHideMenuBar(menuVisible);
+          win.setMenuBarVisibility(!menuVisible);
 
-          this.browserviewPreparer.setBounds(windowProvider.getWindow(), windowProvider.getBrowserView());
+          this.preferences.toggleHideMenuBar();
+          this.browserviewPreparer.setBounds(win, windowProvider.getBrowserView());
         },
-        label: "Auto-hide Menu Bar",
-        type: "checkbox",
-      });
-
-      globalShortcut.register("Alt+M", () => {
-        if (!this.preferences.autoHideMenuBar()) {
-          return;
-        }
-
-        const window = windowProvider.getWindow();
-        if (window.isMenuBarVisible()) {
-          window.setAutoHideMenuBar(true);
-          window.setMenuBarVisibility(false);
-        } else {
-          window.setAutoHideMenuBar(false);
-          window.setMenuBarVisibility(true);
-        }
-
-        this.browserviewPreparer.setBounds(window, windowProvider.getBrowserView());
+        label: "Toggle Menu Bar Visibility",
       });
     }
 
+    const window = windowProvider.getWindow();
+    const hideMenuBar = this.preferences.hideMenuBar();
     const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
 
-    // if they turn on auto hide, then this should be hidden.
-    // if they turn off auto hide, we will show this menu bar immediately.
-    windowProvider.getWindow().setMenuBarVisibility(!this.preferences.autoHideMenuBar());
-    windowProvider.getWindow().setAutoHideMenuBar(this.preferences.autoHideMenuBar());
-    this.browserviewPreparer.setBounds(windowProvider.getWindow(), windowProvider.getBrowserView());
+    Menu.setApplicationMenu(menu);
+    window.setAutoHideMenuBar(hideMenuBar);
+    window.setMenuBarVisibility(!hideMenuBar);
+
+    this.browserviewPreparer.setBounds(window, windowProvider.getBrowserView());
   }
 
   public buildTray = (windowProvider: WindowProvider, webSocket: PulseWebSocket) => {
