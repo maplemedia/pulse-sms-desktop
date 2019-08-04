@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, dialog, Menu, MessageBoxReturnValue, Tray } from "electron";
+import { app, dialog, globalShortcut, Menu, MessageBoxReturnValue, Tray } from "electron";
 import * as path from "path";
 
 import DesktopPreferences from "./preferences";
@@ -303,6 +303,23 @@ export default class PulseMenu {
         },
         label: "Auto-hide Menu Bar",
         type: "checkbox",
+      });
+
+      globalShortcut.register("Alt+M", () => {
+        if (!this.preferences.autoHideMenuBar()) {
+          return;
+        }
+
+        const window = windowProvider.getWindow();
+        if (window.isMenuBarVisible()) {
+          window.setAutoHideMenuBar(true);
+          window.setMenuBarVisibility(false);
+        } else {
+          window.setAutoHideMenuBar(false);
+          window.setMenuBarVisibility(true);
+        }
+
+        this.browserviewPreparer.setBounds(window, windowProvider.getBrowserView());
       });
     }
 
