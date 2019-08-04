@@ -62,20 +62,20 @@ export default class BrowserViewPreparer {
   }
 
   private getYOffset = (window: BrowserWindow): number => {
-    if (process.platform === "darwin") {
+    if (process.platform === "darwin" || !this.preferences.autoHideMenuBar()) {
       return 0;
     }
 
-    return window.isMenuBarVisible() ? 20 : 0
+    return window.isMenuBarVisible() ? 20 : 0;
   }
 
   private getTitleBarSize = (window: BrowserWindow): number => {
     if (process.platform === "darwin") {
       return 20;
     } else if (process.platform === "win32") {
-      return window.isMenuBarVisible() ? 40 : 60;
+      return this.preferences.autoHideMenuBar() && window.isMenuBarVisible() ? 40 : 60;
     } else {
-      return window.isMenuBarVisible() ? 20 : 0;
+      return this.preferences.autoHideMenuBar() && window.isMenuBarVisible() ? 20 : 0;
     }
   }
 
