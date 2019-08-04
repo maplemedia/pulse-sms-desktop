@@ -299,7 +299,7 @@ export default class PulseMenu {
           windowProvider.getWindow().setAutoHideMenuBar(autoHide);
           windowProvider.getWindow().setMenuBarVisibility(!autoHide);
 
-          this.browserviewPreparer.prepare(windowProvider.getWindow(), windowProvider.getBrowserView());
+          this.browserviewPreparer.setBounds(windowProvider.getWindow(), windowProvider.getBrowserView());
         },
         label: "Auto-hide Menu Bar",
         type: "checkbox",
@@ -313,6 +313,7 @@ export default class PulseMenu {
     // if they turn off auto hide, we will show this menu bar immediately.
     windowProvider.getWindow().setMenuBarVisibility(!this.preferences.autoHideMenuBar());
     windowProvider.getWindow().setAutoHideMenuBar(this.preferences.autoHideMenuBar());
+    this.browserviewPreparer.setBounds(windowProvider.getWindow(), windowProvider.getBrowserView());
   }
 
   public buildTray = (windowProvider: WindowProvider, webSocket: PulseWebSocket) => {
@@ -383,4 +384,3 @@ export default class PulseMenu {
   }
 
 }
-
