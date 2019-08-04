@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, dialog, Menu, MessageBoxReturnValue, Tray } from "electron";
+import { app, dialog, globalShortcut, Menu, MessageBoxReturnValue, Tray } from "electron";
 import * as path from "path";
 
 import DesktopPreferences from "./preferences";
@@ -221,17 +221,15 @@ export default class PulseMenu {
             type: "info",
           };
 
-          try {
-            dialog.showMessageBox(null, dialogOpts)
-              .then((value: MessageBoxReturnValue) => {
-                if (value.response === 0) {
-                  webSocket.closeWebSocket();
-                  app.exit(0);
-                }
-              });
-          } catch (err) {
-            // no-op
-          }
+          dialog.showMessageBox(null, dialogOpts)
+            .then((value: MessageBoxReturnValue) => {
+              if (value.response === 0) {
+                webSocket.closeWebSocket();
+                app.exit(0);
+              }
+            }).catch(() => {
+              // no-op
+            });
         },
         label: "Use Spellcheck",
         type: "checkbox",
@@ -290,29 +288,45 @@ export default class PulseMenu {
         { label: "Bring All to Front", role: "front" },
       ];
     } else {
-      template[0].submenu.push({
-        checked: this.preferences.autoHideMenuBar(),
+      // Windows menu
+      template[3].submenu.push({ type: "separator" });
+      template[3].submenu.push({
+        accelerator: "Alt+M",
         click: (): void => {
-          const autoHide = !this.preferences.autoHideMenuBar();
-          this.preferences.toggleAutoHideMenuBar();
+          const win = windowProvider.getWindow();
+          const menuVisible = win.isMenuBarVisible();
 
-          windowProvider.getWindow().setAutoHideMenuBar(autoHide);
-          windowProvider.getWindow().setMenuBarVisibility(!autoHide);
+          win.setAutoHideMenuBar(menuVisible);
+          win.setMenuBarVisibility(!menuVisible);
 
-          this.browserviewPreparer.prepare(windowProvider.getWindow(), windowProvider.getBrowserView());
+          this.preferences.toggleHideMenuBar();
+          this.browserviewPreparer.setBounds(win, windowProvider.getBrowserView());
+
+          if (menuVisible && !this.preferences.seenMenuBarWarning()) {
+            const dialogOpts = {
+              buttons: ["OK"],
+              message: "Tapping Alt+M will allow you to toggle whether or not the menu bar is displayed.",
+              title: "Showing the Menu Bar",
+              type: "info",
+            };
+
+            dialog.showMessageBox(null, dialogOpts);
+            this.preferences.toggleSeenMenuBarWarning();
+          }
         },
-        label: "Auto-hide Menu Bar",
-        type: "checkbox",
+        label: "Toggle Menu Bar Visibility",
       });
     }
 
+    const window = windowProvider.getWindow();
+    const hideMenuBar = this.preferences.hideMenuBar();
     const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
 
-    // if they turn on auto hide, then this should be hidden.
-    // if they turn off auto hide, we will show this menu bar immediately.
-    windowProvider.getWindow().setMenuBarVisibility(!this.preferences.autoHideMenuBar());
-    windowProvider.getWindow().setAutoHideMenuBar(this.preferences.autoHideMenuBar());
+    Menu.setApplicationMenu(menu);
+    window.setAutoHideMenuBar(hideMenuBar);
+    window.setMenuBarVisibility(!hideMenuBar);
+
+    this.browserviewPreparer.setBounds(window, windowProvider.getBrowserView());
   }
 
   public buildTray = (windowProvider: WindowProvider, webSocket: PulseWebSocket) => {
@@ -383,4 +397,3 @@ export default class PulseMenu {
   }
 
 }
-

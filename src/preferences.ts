@@ -23,7 +23,8 @@ export default class DesktopPreferences {
   private static SNOOZE_PREFERENCE = "snooze-selected-preference";
 
   // Boolean Preference: Default to FALSE
-  private static AUTO_HIDE_MENU_BAR = "auto-hide-menu-bar";
+  private static HIDE_MENU_BAR = "hide-menu-bar";
+  private static SEEN_MENU_BAR_WARNING = "seen-menu-bar-warning";
 
   // Boolean Preference: Default to TRUE
   private static SHOW_NOTIFICATIONS = "show-notifications";
@@ -74,9 +75,14 @@ export default class DesktopPreferences {
     }
   }
 
-  public autoHideMenuBar = (): boolean => (
-    settings.has(DesktopPreferences.AUTO_HIDE_MENU_BAR) &&
-      settings.get(DesktopPreferences.AUTO_HIDE_MENU_BAR) === "true"
+  public hideMenuBar = (): boolean => (
+    settings.has(DesktopPreferences.HIDE_MENU_BAR) &&
+      settings.get(DesktopPreferences.HIDE_MENU_BAR) === "true"
+  )
+
+  public seenMenuBarWarning = (): boolean => (
+    settings.has(DesktopPreferences.SEEN_MENU_BAR_WARNING) &&
+      settings.get(DesktopPreferences.SEEN_MENU_BAR_WARNING) === "true"
   )
 
   public showNotifications = (): boolean => (
@@ -119,8 +125,12 @@ export default class DesktopPreferences {
       settings.get(DesktopPreferences.MINIMIZE_TO_TRAY) === "true"
   )
 
-  public toggleAutoHideMenuBar = (): void => {
-    this.togglePreference(DesktopPreferences.AUTO_HIDE_MENU_BAR, this.autoHideMenuBar);
+  public toggleHideMenuBar = (): void => {
+    this.togglePreference(DesktopPreferences.HIDE_MENU_BAR, this.hideMenuBar);
+  }
+
+  public toggleSeenMenuBarWarning = (): void => {
+    this.togglePreference(DesktopPreferences.SEEN_MENU_BAR_WARNING, this.seenMenuBarWarning);
   }
 
   public toggleShowNotifications = (): void => {

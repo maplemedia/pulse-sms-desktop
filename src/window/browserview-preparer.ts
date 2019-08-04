@@ -26,13 +26,8 @@ export default class BrowserViewPreparer {
   private preferences = new DesktopPreferences();
 
   public prepare = (window: BrowserWindow, browser: BrowserView) => {
-    browser.setBounds({
-      height: window.getBounds().height - this.getTitleBarSize(window),
-      width: window.getBounds().width,
-      x: 0,
-      y: 0,
-    });
-    browser.setAutoResize( { width: true, height: true, horizontal: false, vertical: false } );
+    this.setBounds(window, browser);
+    browser.setAutoResize( { width: true, height: true, horizontal: false, vertical: true } );
     browser.webContents.loadURL("https://pulsesms.app");
 
     browser.webContents.on("dom-ready", (event: Event): void => {
@@ -57,13 +52,22 @@ export default class BrowserViewPreparer {
     this.spellCheck.prepareMenu(window, browser);
   }
 
+  public setBounds = (window: BrowserWindow, browser: BrowserView) => {
+    browser.setBounds({
+      height: window.getBounds().height - this.getTitleBarSize(window),
+      width: window.getBounds().width,
+      x: 0,
+      y: 0,
+    });
+  }
+
   private getTitleBarSize = (window: BrowserWindow): number => {
     if (process.platform === "darwin") {
       return 20;
     } else if (process.platform === "win32") {
-      return this.preferences.autoHideMenuBar() ? 40 : 60;
+      return window.isMenuBarVisible() ? 60 : 40;
     } else {
-      return 0;
+      return window.isMenuBarVisible() ? 20 : 0;
     }
   }
 
