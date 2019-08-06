@@ -21,7 +21,7 @@ The desktop app is built on top of Electron's `BrowserView`, rather than Chromiu
 
 ```
 $ npm install -g electron
-$ yarn install
+$ yarn
 ```
 
 2. Run the app:
@@ -30,7 +30,7 @@ $ yarn install
 $ yarn start
 ```
 
-The app will only run if you have shut down any other instances. To ensure that only one web socket connection is made and managed, only a single instance of Pulse is allowed to run. If you use `npm start` while another instance is running, it will simply display the window of that old instance, instead of starting the app.
+The app will only run if you have shut down any other instances. To ensure that only one web socket connection is made and managed, only a single instance of Pulse is allowed to run. If you use `yarn start` while another instance is running, it will simply display the window of that old instance, instead of starting the app.
 
 ## Packaging Information
 
