@@ -54,11 +54,12 @@ export default class BrowserViewPreparer {
 
   public setBounds = (window: BrowserWindow, browser: BrowserView) => {
     const titleBarHeight = this.getTitleBarSize(window);
+    const titleBarOffset = this.getTitleBarOffset();
     browser.setBounds({
       height: window.getBounds().height - titleBarHeight,
       width: window.getBounds().width,
       x: 0,
-      y: titleBarHeight,
+      y: titleBarOffset,
     });
   }
 
@@ -69,6 +70,14 @@ export default class BrowserViewPreparer {
       return window.isMenuBarVisible() ? 60 : 40;
     } else {
       return window.isMenuBarVisible() ? 25 : 0;
+    }
+  }
+
+  private getTitleBarOffset = (): number => {
+    if (process.platform === "darwin") {
+      return 20;
+    } else {
+      return 0;
     }
   }
 
