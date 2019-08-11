@@ -53,11 +53,12 @@ export default class BrowserViewPreparer {
   }
 
   public setBounds = (window: BrowserWindow, browser: BrowserView) => {
+    const titleBarHeight = this.getTitleBarSize(window);
     browser.setBounds({
-      height: window.getBounds().height - this.getTitleBarSize(window),
+      height: window.getBounds().height - titleBarHeight,
       width: window.getBounds().width,
       x: 0,
-      y: 0,
+      y: titleBarHeight,
     });
   }
 
