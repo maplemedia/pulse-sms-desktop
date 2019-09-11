@@ -15,15 +15,13 @@
  */
 
 import { BrowserView, BrowserWindow } from "electron";
-import DesktopPreferences from "./../preferences";
-import SpellcheckProvider from "./../spellcheck/spellcheck-provider";
+import RightClickMenuProvider from "../spellcheck/right-click-menu-provider";
 import WebsocketPreparer from "./../websocket/websocket-preparer";
 
 export default class BrowserViewPreparer {
 
-  private spellCheck = new SpellcheckProvider();
+  private menuProvider = new RightClickMenuProvider();
   private websocketPreparer = new WebsocketPreparer();
-  private preferences = new DesktopPreferences();
 
   public prepare = (window: BrowserWindow, browser: BrowserView) => {
     this.setBounds(window, browser);
@@ -49,7 +47,7 @@ export default class BrowserViewPreparer {
       }
     });
 
-    this.spellCheck.prepareMenu(window, browser);
+    this.menuProvider.prepareMenu(window, browser);
   }
 
   public setBounds = (window: BrowserWindow, browser: BrowserView) => {

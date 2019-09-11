@@ -17,7 +17,7 @@
 import { app, BrowserView, BrowserWindow, dialog, Menu, MenuItem, SaveDialogReturnValue, shell } from "electron";
 import * as fs from "fs";
 
-export default class SpellcheckProvider {
+export default class RightClickMenuProvider {
 
   public prepareMenu = (window: BrowserWindow, browser: BrowserView) => {
     browser.webContents.addListener("context-menu", async (_: any, params: any) => {
@@ -78,7 +78,7 @@ export default class SpellcheckProvider {
     if (params.mediaType === "image") {
       menu.append(new MenuItem({
         click: (): void => {
-          const options = { defaultPath: app.getPath("downloads") + "/image.jpeg" };
+          const options = { defaultPath: app.getPath("downloads") + `/pulse-image-${new Date().getTime()}.jpg` };
           dialog.showSaveDialog(null, options)
             .then((value: SaveDialogReturnValue): void => {
               if (!value.canceled && value.filePath) {
