@@ -41,10 +41,18 @@
       "**/dict/*"
     ],
     "artifactName": "pulse-sms-${version}-${arch}.${ext}",
+    "afterSign": "build/notarize.js",
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "build/icon.png",
-      "type": "distribution"
+      "type": "distribution",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "dmg": {
+      "sign": false
     },
     "win": {
       "icon": "build/icon.png"
@@ -64,8 +72,10 @@
   },
   "devDependencies": {
     "@types/node": "^12.6.8",
+    "dotenv": "^8.1.0",
     "electron": "6.0.8",
     "electron-builder": "21.2.0",
+    "electron-notarize": "^0.1.1",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3"
   },

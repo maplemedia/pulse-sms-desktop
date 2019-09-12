@@ -40,13 +40,30 @@ To package the apps for each platform:
 $ yarn
 
 // MacOS (dmg)
-$ yarn run build-mac
+$ yarn build-mac
 
 // Windows (installer with 32 and 64 bit support)
-$ yarn run build-windows
+$ yarn build-windows
 
 // Linux (deb and AppImage)
-$ yarn run build-linux
+$ yarn build-linux
+```
+
+### Notes on Building for Mac
+
+With MacOS Catalina (`10.14.5`), Apple requires DMG files to be notarized by the distributer. The files that I distribute are all signed and notarized by me.
+
+If you are looking to develop the app yourself, you can debug and run the app through `yarn start` without issue. However, if you want to make a signed executable (`yarn build-mac`), you will need to set up your Apple ID and password for the notarization process.
+
+To do this, you will first need a valid Apple developer account. You can sign up at https://developer.apple.com. You will need to use Xcode to [export your new developer signing information](https://help.apple.com/xcode/mac/current/#/dev154b28f09) and add it to your keychain.
+
+You will then need to generate an app-specific password for that Apple ID. This is not the same as the password that you use to sign in to your developer account. You can create this app-specific password, here: https://appleid.apple.com
+
+After completing those two steps, create a `.env` file in the root of this project. It should look something like:
+
+```
+APPLEID=test@someemail.com
+APPLEIDPASS=xxxx-tttt-vvvv-aaaa
 ```
 
 ## Contributing

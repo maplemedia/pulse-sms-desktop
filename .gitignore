@@ -6,4 +6,5 @@
 **/*.lock
 **/*-lock.json
 **/*.log
+**/.env
 **/built
