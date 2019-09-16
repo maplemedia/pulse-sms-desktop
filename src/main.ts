@@ -38,7 +38,7 @@ if (!gotLock) {
 
 app.on("second-instance", (): void => {
   if (windowProvider == null || windowProvider.getWindow() == null) {
-    initialize();
+    createWindow();
   }
 
   windowProvider.getWindow().show();
