@@ -44,7 +44,6 @@ app.on("second-instance", (): void => {
   windowProvider.getWindow().show();
 });
 
-app.setAppUserModelId("xyz.klinker.messenger");
 app.on("ready", createWindow);
 app.on("activate", createWindow);
 
@@ -105,6 +104,9 @@ autoUpdater.on("error", (): void => {
 function createWindow(): void {
   initialize();
 
+  app.setAppUserModelId("xyz.klinker.messenger");
+  autoUpdater.checkForUpdates();
+
   if (windowProvider.getWindow() === null) {
     mainWindow = windowProvider.createMainWindow();
     tray = menu.buildTray(windowProvider, webSocket);
@@ -120,8 +122,6 @@ function createWindow(): void {
     webSocket.setWindowProvider(windowProvider);
     menu.buildMenu(windowProvider, tray, webSocket);
   }
-
-  autoUpdater.checkForUpdates();
 
   if (process.platform === "win32") {
     app.setLoginItemSettings({
