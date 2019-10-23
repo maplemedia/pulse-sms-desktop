@@ -188,7 +188,7 @@ export default class PulseMenu {
 
         if (!badge) {
           if (process.platform !== "win32") {
-            require("electron").app.setBadgeCount(0);
+            require("electron").app.badgeCount = 0;
           }
 
           if (process.platform === "darwin" && tray != null) {
@@ -257,7 +257,7 @@ export default class PulseMenu {
     }
 
     if (process.platform === "darwin") {
-      const name = require("electron").app.getName();
+      const name = require("electron").app.name;
       template.unshift({
         label: name,
         submenu: [
@@ -296,7 +296,7 @@ export default class PulseMenu {
           const win = windowProvider.getWindow();
           const menuVisible = win.isMenuBarVisible();
 
-          win.setAutoHideMenuBar(menuVisible);
+          win.autoHideMenuBar = menuVisible;
           win.setMenuBarVisibility(!menuVisible);
 
           this.preferences.toggleHideMenuBar();
@@ -323,7 +323,8 @@ export default class PulseMenu {
     const menu = Menu.buildFromTemplate(template);
 
     Menu.setApplicationMenu(menu);
-    window.setAutoHideMenuBar(hideMenuBar);
+
+    window.autoHideMenuBar = hideMenuBar;
     window.setMenuBarVisibility(!hideMenuBar);
 
     this.browserviewPreparer.setBounds(window, windowProvider.getBrowserView());

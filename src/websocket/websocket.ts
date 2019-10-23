@@ -245,7 +245,7 @@ private setWindowsIndicator = (unread: any, tray: Tray): void => {
   }
 
 private setMacLinuxIndicators = (unread: any, tray: Tray) => {
-    app.setBadgeCount(unread.unread);
+    app.badgeCount = unread.unread;
     if (process.platform === "darwin" && tray != null) {
       tray.setTitle(unread.unread === 0 ? "" : unread.unread + "");
     }
