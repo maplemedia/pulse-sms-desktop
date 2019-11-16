@@ -73,11 +73,11 @@
   "devDependencies": {
     "@types/node": "^12.6.8",
     "dotenv": "^8.1.0",
-    "electron": "7.0.0",
-    "electron-builder": "22.0.0",
+    "electron": "7.1.1",
+    "electron-builder": "22.1.0",
     "electron-notarize": "^0.1.1",
     "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.7.2"
   },
   "dependencies": {
     "electron-hunspell": "1.0.0",
