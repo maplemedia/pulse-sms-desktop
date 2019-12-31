@@ -68,7 +68,7 @@ APPLEIDPASS=xxxx-tttt-vvvv-aaaa
 
 ## Contributing
 
-Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/messenger-desktop/pulls). Features can be requested using issues on our Pulse platform issue tracker, rather than creating issues directly on this repo: https://github.com/klinker-apps/messenger-issues.
+Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/pulse-desktop/pulls). Features can be requested using issues on our Pulse platform issue tracker, rather than creating issues directly on this repo: https://github.com/klinker-apps/messenger-issues.
 
 This project was originally a JavaScript project and I am not a big fan of JavaScript. As such, the project now uses Typescript. Many things aren't structured in a very Typescript-y way. I will continue to improve this, as I have time. Pull requests would be more than welcome, to make the app more Typescript-y.
 

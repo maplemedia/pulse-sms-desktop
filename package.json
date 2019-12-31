@@ -19,7 +19,7 @@
     "publish-windows": "yarn build && electron-builder build --windows nsis --x64 --ia32 --publish always",
     "publish-win-mac": "yarn build && electron-builder build --mac --windows nsis --x64 --ia32 --publish always"
   },
-  "repository": "https://github.com/klinker-apps/messenger-desktop",
+  "repository": "https://github.com/klinker-apps/pulse-desktop",
   "keywords": [
     "pulse",
     "sms",
@@ -65,7 +65,7 @@
       {
         "provider": "github",
         "owner": "klinker-apps",
-        "repo": "messenger-desktop",
+        "repo": "pulse-desktop",
         "releaseType": "draft"
       }
     ]

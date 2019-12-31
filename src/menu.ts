@@ -156,7 +156,7 @@ export default class PulseMenu {
       role: "help",
       submenu: [ {
           click: (): void => {
-            require("electron").shell.openExternal("https://github.com/klinker-apps/messenger-desktop/releases");
+            require("electron").shell.openExternal("https://github.com/klinker-apps/pulse-desktop/releases");
           },
           label: require("electron").app.getVersion(),
         }, {
