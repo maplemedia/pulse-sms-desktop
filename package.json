@@ -4,7 +4,7 @@
   "description": "A native desktop implementation of Pulse",
   "main": "built/main.js",
   "scripts": {
-    "build": "tsc && (cp -r src/assets built/assets || copy /b src/asserts built/assets)",
+    "build": "tsc && (cp -r src/assets built/assets || xcopy \"src/assets\" \"built/assets\" /y /i /s)",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "yarn run build && electron .",
@@ -77,7 +77,7 @@
     "electron-builder": "22.1.0",
     "electron-notarize": "^0.1.1",
     "tslint": "^5.18.0",
-    "typescript": "^3.7.2"
+    "typescript": "3.7.4"
   },
   "dependencies": {
     "electron-hunspell": "1.0.0",

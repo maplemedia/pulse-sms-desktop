@@ -4,7 +4,7 @@
       "target": "es5",
       "noImplicitAny": false,
       "outDir": "built",
-      "module": "commonjs", 
+      "module": "commonjs",
     },
     "include": [
       "src/**/*"
