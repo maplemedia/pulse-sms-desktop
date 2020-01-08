@@ -77,7 +77,7 @@
     "electron-builder": "22.1.0",
     "electron-notarize": "^0.1.1",
     "tslint": "^5.18.0",
-    "typescript": "3.7.4"
+    "typescript": "^3.7.2"
   },
   "dependencies": {
     "electron-hunspell": "1.0.0",
