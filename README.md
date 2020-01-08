@@ -17,10 +17,12 @@ The desktop app is built on top of Electron's `BrowserView`, rather than Chromiu
 
 ## Build Instructions
 
-1. Install Electron and project dependencies:
+1. Install Electron, Yarn, Typescript, and project dependencies:
 
 ```
 $ npm install -g electron
+$ npm install yarn -g
+$ npm install typescript -g
 $ yarn
 ```
 
