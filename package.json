@@ -4,7 +4,7 @@
   "description": "A native desktop implementation of Pulse",
   "main": "built/main.js",
   "scripts": {
-    "build": "tsc && cp -r src/assets built/assets",
+    "build": "tsc && (cp -r src/assets built/assets || xcopy \"src/assets\" \"built/assets\" /y /i /s)",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "yarn run build && electron .",
