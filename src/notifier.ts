@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, Notification } from "electron";
+import { app, Notification, NotificationConstructorOptions } from "electron";
 import * as storage from "electron-json-storage";
 import * as https from "https";
 import * as path from "path";
@@ -56,16 +56,17 @@ export default class Notifier {
   private genericNotification = (
     title: string, snippet: string, conversationId: number, isPrivate: boolean,
   ): void => {
-    const options = {
+    const options: NotificationConstructorOptions = {
       body: snippet,
       hasReply: !isPrivate,
       replyPlaceholder: "Reply to " + title,
       silent: !this.preferences.notificationSounds(),
+      timeoutType: "never",
       title,
     };
 
     if (process.platform !== "darwin") {
-      (options as any).icon = path.join(__dirname, "assets/notification-icon.png");
+      options.icon = path.join(__dirname, "assets/notification-icon.png");
     }
 
     if (this.currentNotification != null) {
@@ -124,21 +125,6 @@ export default class Notifier {
     setTimeout((): void => {
       this.windowProvider.getBrowserView().webContents.loadURL(link);
     }, 1000);
-  }
-
-  private createReplyWindow = (link: string): void => {
-    if (this.windowProvider.getReplyWindow() !== null) {
-      this.windowProvider.getReplyWindow().webContents
-        .executeJavaScript(`document.getElementById("messenger").loadURL("${link}")`);
-      this.windowProvider.getReplyWindow().show();
-      this.windowProvider.getReplyWindow().focus();
-    } else {
-      this.windowProvider.createReplyWindow();
-      setTimeout((): void => {
-        this.windowProvider.getReplyWindow().webContents
-          .executeJavaScript(`document.getElementById("messenger").loadURL("${link}")`);
-      }, 500);
-    }
   }
 
   private sendMessage = (text: string, conversationId: number): void => {
