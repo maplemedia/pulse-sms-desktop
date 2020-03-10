@@ -80,7 +80,7 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "electron-hunspell": "1.0.0",
+    "electron-hunspell": "1.1.2",
     "electron-json-storage": "3.1.0",
     "electron-settings": "3.1.4",
     "electron-updater": "4.1.2",
