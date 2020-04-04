@@ -42,7 +42,7 @@ export default class WindowProvider {
       mainWindowState = windowStateKeeper( { defaultWidth: 1000, defaultHeight: 750 } );
       bounds = {
         height: mainWindowState.height,
-        icon: path.join(__dirname, "../build/icon.png"),
+        icon: path.join(__dirname, "../../build/icon.png"),
         minHeight: 300,
         minWidth: 300,
         show: !noGui,
@@ -54,7 +54,7 @@ export default class WindowProvider {
     } catch (err) {
       bounds = {
         height: 750,
-        icon: path.join(__dirname, "../build/icon.png"),
+        icon: path.join(__dirname, "../../build/icon.png"),
         minHeight: 300,
         minWidth: 300,
         show: !noGui,
@@ -112,7 +112,7 @@ export default class WindowProvider {
   public createReplyWindow = (): void => {
     const window = new BrowserWindow({
       height: 550,
-      icon: path.join(__dirname, "../build/icon.png"),
+      icon: path.join(__dirname, "../../build/icon.png"),
       minHeight: 300,
       minWidth: 300,
       title: "Pulse SMS Popup",

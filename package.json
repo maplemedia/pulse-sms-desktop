@@ -73,8 +73,8 @@
   "devDependencies": {
     "@types/node": "^12.6.8",
     "dotenv": "^8.1.0",
-    "electron": "8.0.1",
-    "electron-builder": "22.3.2",
+    "electron": "9.0.0-beta.13",
+    "electron-builder": "22.5.0",
     "electron-notarize": "^0.1.1",
     "tslint": "^5.18.0",
     "typescript": "^3.7.2"
@@ -83,7 +83,7 @@
     "electron-hunspell": "1.1.2",
     "electron-json-storage": "3.1.0",
     "electron-settings": "3.1.4",
-    "electron-updater": "4.1.2",
+    "electron-updater": "4.2.4",
     "electron-window-state": "5.0.3",
     "https-proxy-agent": "2.2.1",
     "ws": ">=3.3.1"
