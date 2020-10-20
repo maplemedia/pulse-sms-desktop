@@ -51,7 +51,7 @@ export default class WebsocketPreparer {
     const envProxy = process.env.PULSE_PROXY || process.env.HTTPS_PROXY;
     if (!this.proxyAgent && envProxy) {
       // console.log("Attempting to get a proxy agent with \"" + envProxy + "\"");
-      this.proxyAgent = HttpsProxyAgent(envProxy);
+      this.proxyAgent = new HttpsProxyAgent(envProxy);
     }
 
     return this.proxyAgent;
