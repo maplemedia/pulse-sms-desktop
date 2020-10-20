@@ -17,28 +17,33 @@ The desktop app is built on top of Electron's `BrowserView`, rather than Chromiu
 
 ## Build Instructions
 
-1. Use Yarn as the package manager:
+You will need to set up Node.js. Pulse uses a typical Node development environment.
+
+1. Use Yarn as the package manager (this is a recommendation from the `electron-builder` tool):
 
 ```
 $ npm install yarn -g
+```
+
+2. Install the dependencies:
+
+```
 $ yarn
 ```
 
-2. Run the app:
+3. Run the app:
 
 ```
 $ yarn start
 ```
 
-The app will only run if you have shut down any other instances. To ensure that only one web socket connection is made and managed, only a single instance of Pulse is allowed to run. If you use `yarn start` while another instance is running, it will simply display the window of that old instance, instead of starting the app.
+The app will only run if you have shut down any other instances. To ensure that only one web socket connection is made and managed, only a single instance of Pulse is allowed to run. That means that if you have the production version of the Pulse desktop app running, you won't be able to run a development version at the same time. If you use `yarn start` while that production instance is running, it will simply display the window of that production instance, instead of starting a new instance of the app.
 
 ## Packaging Information
 
 To package the apps for each platform:
 
 ```
-$ yarn
-
 // MacOS (dmg)
 $ yarn build-mac
 
