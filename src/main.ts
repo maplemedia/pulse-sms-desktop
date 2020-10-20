@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { app, BrowserWindow, crashReporter, dialog, MessageBoxReturnValue, Tray } from "electron";
+import { app, BrowserWindow, dialog, MessageBoxReturnValue, Tray } from "electron";
 import { autoUpdater } from "electron-updater";
 
 import PulseMenu from "./menu";
@@ -60,18 +60,6 @@ app.on("before-quit", () => {
 
   app.exit(0);
 });
-
-try {
-  crashReporter.start({
-    companyName: "messenger-desktop",
-    productName: "messenger",
-    // tslint:disable-next-line:max-line-length
-    submitURL: "https://messenger-desktop.sp.backtrace.io:6098/post?format=minidump&token=6b041aff41e611b0cbd7c098dba17a179459092c02601691d7261944d0f5705e",
-    uploadToServer: true,
-  });
-} catch (err) {
-  // no-op
-}
 
 autoUpdater.on("update-downloaded", (): void => {
   const dialogOpts = {
