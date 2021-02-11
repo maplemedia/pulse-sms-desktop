@@ -156,7 +156,7 @@ export default class Notifier {
           "Content-Length": Buffer.byteLength(data),
           "Content-Type": "application/json",
         },
-        hostname: "api.messenger.klinkerapps.com",
+        hostname: "api.pulsesms.app",
         method: "POST",
         path: "/api/v1/messages/add",
       };
@@ -185,7 +185,7 @@ export default class Notifier {
           "Content-Length": Buffer.byteLength(data),
           "Content-Type": "application/json",
         },
-        hostname: "api.messenger.klinkerapps.com",
+        hostname: "api.pulsesms.app",
         method: "POST",
         path: "/api/v1/accounts/dismissed_notification",
       };
@@ -213,7 +213,7 @@ export default class Notifier {
           "Content-Length": Buffer.byteLength(data),
           "Content-Type": "application/json",
         },
-        hostname: "api.messenger.klinkerapps.com",
+        hostname: "api.pulsesms.app",
         method: "POST",
         path: `/api/v1/conversations/read/${conversationId}`,
       };

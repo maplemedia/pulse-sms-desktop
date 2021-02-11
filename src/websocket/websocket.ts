@@ -77,7 +77,7 @@ export default class PulseWebSocket {
   private open = (accountId: number): void => {
     this.closeWebSocket();
 
-    const wsUrl = "wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + accountId;
+    const wsUrl = "wss://api.pulsesms.app/api/v1/stream?account_id=" + accountId;
     this.socket = new WebSocket(wsUrl, { agent: this.preparer.getProxyAgent() });
 
     this.socket.on("error", (_: any): void =>  {
@@ -180,7 +180,7 @@ export default class PulseWebSocket {
       if (message.type === 0) {
         // console.log("providing notification");
 
-        const conversationUrl = "https://api.messenger.klinkerapps.com/api/v1/conversations/" +
+        const conversationUrl = "https://api.pulsesms.app/api/v1/conversations/" +
           message.conversation_id + "?account_id=" + result.account_id;
         this.getJSON(conversationUrl, (conversation: any) => {
           if (typeof conversation !== "undefined" && conversation != null) {
@@ -207,7 +207,7 @@ export default class PulseWebSocket {
     setTimeout(() => {
       storage.get("account_id", (error: any, id: string) => {
         if (!error && id.length !== 0) {
-          const urlToGet = "https://api.messenger.klinkerapps.com/api/v1/conversations/unread_count?account_id=" + id;
+          const urlToGet = "https://api.pulsesms.app/api/v1/conversations/unread_count?account_id=" + id;
           this.getJSON(urlToGet, (unread?: any | null): void => {
             if (unread) {
               try {
