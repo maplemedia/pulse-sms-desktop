@@ -161,12 +161,12 @@ export default class PulseMenu {
           label: require("electron").app.getVersion(),
         }, {
           click: (): void => {
-            require("electron").shell.openExternal("https://messenger.klinkerapps.com/help");
+            require("electron").shell.openExternal("https://home.pulsesms.app/help");
           },
           label: "Get Help",
         }, {
           click: (): void => {
-            require("electron").shell.openExternal("https://messenger.klinkerapps.com/overview");
+            require("electron").shell.openExternal("https://home.pulsesms.app/overview");
           },
           label: "Platform Support",
         }, {
