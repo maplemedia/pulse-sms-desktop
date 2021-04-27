@@ -17,7 +17,7 @@ The desktop app is built on top of Electron's `BrowserView`, rather than Chromiu
 
 ## Build Instructions
 
-You will need to set up Node.js. Pulse uses a typical Node development environment.
+You will need to set up Node.js v12.x. Pulse uses a typical Node development environment.
 
 1. Use Yarn as the package manager (this is a recommendation from the `electron-builder` tool):
 
