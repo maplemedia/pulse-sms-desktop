@@ -26,7 +26,7 @@ export default class BrowserViewPreparer {
   public prepare = (window: BrowserWindow, browser: BrowserView) => {
     this.setBounds(window, browser);
     browser.setAutoResize( { width: true, height: true, horizontal: false, vertical: true } );
-    browser.webContents.loadURL("https://pulsesms.app");
+    browser.webContents.loadURL("https://pulsesms.app?iframe_source=desktop");
 
     browser.webContents.on("dom-ready", (event: Event): void => {
       this.websocketPreparer.prepare(browser);
@@ -34,7 +34,7 @@ export default class BrowserViewPreparer {
 
     browser.webContents.on("did-fail-load", (event: Event): void => {
       setTimeout(() => {
-        browser.webContents.loadURL("https://pulsesms.app");
+        browser.webContents.loadURL("https://pulsesms.app?iframe_source=desktop");
       }, 2000);
     });
 

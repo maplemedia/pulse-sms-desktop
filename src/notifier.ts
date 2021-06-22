@@ -82,10 +82,10 @@ export default class Notifier {
     });
 
     this.currentNotification.on("click", (): void => {
-      let link = "https://pulsesms.app/thread/" + conversationId;
+      let link = "https://pulsesms.app/thread/" + conversationId + "?iframe_source=desktop";
 
       if (isPrivate) {
-        link = "https://pulsesms.app/passcode";
+        link = "https://pulsesms.app/passcode?iframe_source=desktop";
       }
 
       if (this.windowProvider.getWindow() !== null) {

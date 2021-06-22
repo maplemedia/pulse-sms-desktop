@@ -129,7 +129,7 @@ export default class PulseMenu {
       submenu: [{
         accelerator: "CmdOrCtrl+R",
         click: (): void => {
-          windowProvider.getBrowserView().webContents.loadURL("https://pulsesms.app");
+          windowProvider.getBrowserView().webContents.loadURL("https://pulsesms.app?iframe_source=desktop");
         },
         label: "Reload",
       }, {
