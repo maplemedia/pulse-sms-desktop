@@ -25,6 +25,7 @@ export default class DesktopPreferences {
   // Boolean Preference: Default to FALSE
   private static HIDE_MENU_BAR = "hide-menu-bar";
   private static SEEN_MENU_BAR_WARNING = "seen-menu-bar-warning";
+  private static AUTO_DISMISS_NOTIFICATIONS = "auto-dismiss-notifications";
 
   // Boolean Preference: Default to TRUE
   private static SHOW_NOTIFICATIONS = "show-notifications";
@@ -95,6 +96,11 @@ export default class DesktopPreferences {
       settings.get(DesktopPreferences.NOTIFICATION_SOUNDS) === "true"
   )
 
+  public autoDismissNotifications = (): boolean => (
+    settings.has(DesktopPreferences.AUTO_DISMISS_NOTIFICATIONS) &&
+      settings.get(DesktopPreferences.AUTO_DISMISS_NOTIFICATIONS) === "true"
+  )
+
   public notificationSenderPreviews = (): boolean => (
     !settings.has(DesktopPreferences.NOTIFICATION_SENDER_PREVIEWS) ||
       settings.get(DesktopPreferences.NOTIFICATION_SENDER_PREVIEWS) === "true"
@@ -139,6 +145,10 @@ export default class DesktopPreferences {
 
   public toggleNotificationSounds = (): void => {
     this.togglePreference(DesktopPreferences.NOTIFICATION_SOUNDS, this.notificationSounds);
+  }
+
+  public toggleAutoDismissNotifications = (): void => {
+    this.togglePreference(DesktopPreferences.AUTO_DISMISS_NOTIFICATIONS, this.autoDismissNotifications);
   }
 
   public toggleNotificationSenderPreviews = (): void => {

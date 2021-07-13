@@ -43,6 +43,15 @@ export default class PulseMenu {
         },
         label: "Play Notification Sound",
         type: "checkbox",
+      }, {
+        checked: this.preferences.autoDismissNotifications(),
+        click: (): void => {
+          this.preferences.toggleAutoDismissNotifications();
+        },
+        label: "Auto-Dismiss Notifications",
+        type: "checkbox",
+        // `timeoutType` is only applicable to Windows and Linux systems
+        visible: process.platform !== "darwin"
       }, { type: "separator" }, {
         checked: this.preferences.notificationSenderPreviews(),
         click: (): void => {
