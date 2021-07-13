@@ -29,6 +29,7 @@ export default class DesktopPreferences {
   // Boolean Preference: Default to TRUE
   private static SHOW_NOTIFICATIONS = "show-notifications";
   private static NOTIFICATION_SOUNDS = "notification-sounds";
+  private static AUTO_DISMISS_NOTIFICATIONS = "notification-timeout-type";
   private static NOTIFICATION_SENDER_PREVIEWS = "notification-sender-previews";
   private static NOTIFICATION_MESSAGE_PREVIEWS = "notification-message-previews";
   private static BADGE_DOCK_ICON = "badge-dock-icon";
@@ -95,6 +96,11 @@ export default class DesktopPreferences {
       settings.get(DesktopPreferences.NOTIFICATION_SOUNDS) === "true"
   )
 
+  public autoDismissNotifications = (): boolean => (
+    settings.has(DesktopPreferences.AUTO_DISMISS_NOTIFICATIONS) &&
+      settings.get(DesktopPreferences.AUTO_DISMISS_NOTIFICATIONS) === "true"
+  )
+
   public notificationSenderPreviews = (): boolean => (
     !settings.has(DesktopPreferences.NOTIFICATION_SENDER_PREVIEWS) ||
       settings.get(DesktopPreferences.NOTIFICATION_SENDER_PREVIEWS) === "true"
@@ -139,6 +145,10 @@ export default class DesktopPreferences {
 
   public toggleNotificationSounds = (): void => {
     this.togglePreference(DesktopPreferences.NOTIFICATION_SOUNDS, this.notificationSounds);
+  }
+
+  public toggleAutoDismissNotifications = (): void => {
+    this.togglePreference(DesktopPreferences.AUTO_DISMISS_NOTIFICATIONS, this.autoDismissNotifications);
   }
 
   public toggleNotificationSenderPreviews = (): void => {

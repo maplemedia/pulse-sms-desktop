@@ -43,6 +43,13 @@ export default class PulseMenu {
         },
         label: "Play Notification Sound",
         type: "checkbox",
+      }, {
+        checked: this.preferences.autoDismissNotifications(),
+        click: (): void => {
+          this.preferences.toggleAutoDismissNotifications();
+        },
+        label: "Auto-Dismiss Notifications",
+        type: "checkbox",
       }, { type: "separator" }, {
         checked: this.preferences.notificationSenderPreviews(),
         click: (): void => {

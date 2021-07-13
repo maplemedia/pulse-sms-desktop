@@ -61,7 +61,7 @@ export default class Notifier {
       hasReply: !isPrivate,
       replyPlaceholder: "Reply to " + title,
       silent: !this.preferences.notificationSounds(),
-      timeoutType: "never",
+      timeoutType: this.preferences.autoDismissNotifications() ? "default" : "never",
       title,
     };
 
