@@ -50,6 +50,8 @@ export default class PulseMenu {
         },
         label: "Auto-Dismiss Notifications",
         type: "checkbox",
+        // `timeoutType` is only applicable to Windows and Linux systems
+        visible: process.platform !== "darwin"
       }, { type: "separator" }, {
         checked: this.preferences.notificationSenderPreviews(),
         click: (): void => {
