@@ -25,11 +25,11 @@ export default class DesktopPreferences {
   // Boolean Preference: Default to FALSE
   private static HIDE_MENU_BAR = "hide-menu-bar";
   private static SEEN_MENU_BAR_WARNING = "seen-menu-bar-warning";
+  private static AUTO_DISMISS_NOTIFICATIONS = "auto-dismiss-notifications";
 
   // Boolean Preference: Default to TRUE
   private static SHOW_NOTIFICATIONS = "show-notifications";
   private static NOTIFICATION_SOUNDS = "notification-sounds";
-  private static AUTO_DISMISS_NOTIFICATIONS = "auto-dismiss-notifications";
   private static NOTIFICATION_SENDER_PREVIEWS = "notification-sender-previews";
   private static NOTIFICATION_MESSAGE_PREVIEWS = "notification-message-previews";
   private static BADGE_DOCK_ICON = "badge-dock-icon";
